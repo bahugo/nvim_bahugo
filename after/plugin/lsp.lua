@@ -4,13 +4,21 @@ lsp.preset("recommended")
 
 lsp.ensure_installed({
   'sumneko_lua',
-  'rust_analyzer',
+  --'rust_analyzer',
   "pylsp",
   "marksman",
   "omnisharp",
 })
 
 require'lspconfig'.qmlls.setup{}
+
+lsp.nvim_workspace({
+    root_dir = function (fname)
+        print("recherche de root_dir")
+        return lsp.utils.find_git_ancestor(fname) or vim.loop.os_homedir()
+    end;
+    library = vim.api.nvim_get_runtime_file('', true)
+})
 
 -- Fix Undefined global 'vim'
 lsp.configure('sumneko_lua', {
