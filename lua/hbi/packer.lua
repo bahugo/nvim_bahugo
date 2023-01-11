@@ -34,8 +34,12 @@ return require('packer').startup(function(use)
   use('nvim-treesitter/playground')
   use('theprimeagen/harpoon')
   use('mbbill/undotree')
+  use {"akinsho/toggleterm.nvim", tag = '*',
+  config = function()
+      require("toggleterm").setup()
+  end}
+  use {'lewis6991/gitsigns.nvim'}
   use('tpope/vim-fugitive')
-
   use 'nvim-lualine/lualine.nvim'
   use 'nvim-tree/nvim-tree.lua'
   use {
@@ -57,6 +61,8 @@ return require('packer').startup(function(use)
 		  -- Snippets
 		  {'L3MON4D3/LuaSnip'},
 		  {'rafamadriz/friendly-snippets'},
+          -- Useful status Update for LSP
+          {'j-hui/fidget.nvim'},
 	  }
   }
 
