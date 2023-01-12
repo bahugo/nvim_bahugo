@@ -45,7 +45,18 @@ return require('packer').startup(function(use)
           }
       end
   }
-  use({'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'})
+  use {
+      -- Highlight, edit, and navigate code
+      'nvim-treesitter/nvim-treesitter',
+      run = function()
+          pcall(require('nvim-treesitter.install').update { with_sync = true })
+      end,
+  }
+  use {
+      -- Additional text objects via treesitter
+      'nvim-treesitter/nvim-treesitter-textobjects',
+      after = 'nvim-treesitter',
+  }
   use('nvim-treesitter/playground')
   use('theprimeagen/harpoon')
   use('mbbill/undotree')
@@ -55,6 +66,7 @@ return require('packer').startup(function(use)
   end}
   use {'lewis6991/gitsigns.nvim'}
   use('tpope/vim-fugitive')
+  use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
   use 'nvim-lualine/lualine.nvim'
   use 'nvim-tree/nvim-tree.lua'
   use {
