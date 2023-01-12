@@ -10,15 +10,6 @@ lsp.ensure_installed({
   "omnisharp",
 })
 
-require'lspconfig'.qmlls.setup{}
-
-lsp.nvim_workspace({
-    root_dir = function (fname)
-        print("recherche de root_dir")
-        return lsp.utils.find_git_ancestor(fname) or vim.loop.os_homedir()
-    end;
-    library = vim.api.nvim_get_runtime_file('', true)
-})
 
 -- Fix Undefined global 'vim'
 lsp.configure('sumneko_lua', {
@@ -31,6 +22,15 @@ lsp.configure('sumneko_lua', {
     }
 })
 
+require'lspconfig'.qmlls.setup{}
+
+lsp.nvim_workspace({
+    root_dir = function (fname)
+        print("recherche de root_dir")
+        return lsp.utils.find_git_ancestor(fname) or vim.loop.os_homedir()
+    end;
+    library = vim.api.nvim_get_runtime_file('', true)
+})
 
 -- disable completion with tab
 -- this helps with copilot setup
@@ -178,5 +178,5 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
          { name = 'nvim_lsp' },
          { name = 'luasnip' },
      },
- }
+}
 
