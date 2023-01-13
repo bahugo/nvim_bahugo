@@ -70,10 +70,9 @@ return require('packer').startup(function(use)
   use 'nvim-lualine/lualine.nvim'
   use 'nvim-tree/nvim-tree.lua'
   use {
-	  'VonHeikemen/lsp-zero.nvim',
+	  'neovim/nvim-lspconfig',
 	  requires = {
 		  -- LSP Support
-		  {'neovim/nvim-lspconfig'},
 		  {'williamboman/mason.nvim'},
 		  {'williamboman/mason-lspconfig.nvim'},
 
@@ -90,6 +89,8 @@ return require('packer').startup(function(use)
 		  {'rafamadriz/friendly-snippets'},
           -- Useful status Update for LSP
           {'j-hui/fidget.nvim'},
+          -- Additional lua configuration for nvim
+          {'folke/neodev.nvim'}
 	  }
   }
 

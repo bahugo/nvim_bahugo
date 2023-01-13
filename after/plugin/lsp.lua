@@ -1,51 +1,3 @@
--- local lsp = require("lsp-zero")
---
--- lsp.preset("recommended")
---
--- lsp.ensure_installed({
---     'sumneko_lua',
---     'rust_analyzer',
---     "pylsp",
---     "marksman",
---     "omnisharp",
--- })
---
---
--- -- Fix Undefined global 'vim'
--- lsp.configure('sumneko_lua', {
---     settings = {
---         Lua = {
---             diagnostics = {
---                 globals = { 'vim' }
---             }
---         }
---     }
--- })
---
--- require 'lspconfig'.qmlls.setup {}
---
--- lsp.nvim_workspace({
---     root_dir = function(fname)
---         print("recherche de root_dir")
---         return lsp.utils.find_git_ancestor(fname) or vim.loop.os_homedir()
---     end;
---     library = vim.api.nvim_get_runtime_file('', true)
--- })
---
--- -- disable completion with tab
--- -- this helps with copilot setup
--- -- cmp_mappings['<Tab>'] = nil
--- -- cmp_mappings['<S-Tab>'] = nil
--- lsp.set_preferences({
---     suggest_lsp_servers = false,
---     sign_icons = {
---         error = 'E',
---         warn = 'W',
---         hint = 'H',
---         info = 'I'
---     }
--- })
-
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -128,6 +80,9 @@ local servers = {
     -- -- Formaters servers
     -- black = {},
 }
+
+require("neodev").setup()
+
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
