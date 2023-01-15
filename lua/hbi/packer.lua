@@ -93,6 +93,8 @@ return require('packer').startup(function(use)
           {'folke/neodev.nvim'}
 	  }
   }
+  -- debugger
+  use 'mfussenegger/nvim-dap'
 
   use("folke/zen-mode.nvim")
 
