@@ -56,7 +56,16 @@ local servers = {
     -- pyright = {},
     rust_analyzer = {},
     -- tsserver = {},
-    pylsp = {},
+    pylsp = {
+        pylsp ={
+            plugins = {
+                pycodestyle = {
+                    -- ignore = {'W391', },
+                    maxLineLength = 100
+                }
+            }
+        }
+    },
     marksman = {},
     omnisharp = {},
     sumneko_lua = {
@@ -95,10 +104,13 @@ local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
     ensure_installed = vim.tbl_keys(servers),
+    automatic_installation = true
 }
 
 mason_lspconfig.setup_handlers {
     function(server_name)
+        print("lspconfig setup " .. server_name)
+        print(tostring(vim.fn.json_encode(servers[server_name])))
         require('lspconfig')[server_name].setup {
             capabilities = capabilities,
             on_attach = on_attach,
@@ -152,3 +164,20 @@ cmp.setup {
         { name = 'luasnip' },
     },
 }
+require('nvim-lightbulb').setup({autocmd = {enabled = true}})
+
+-- Réglage du format d'affichage des diagnostics
+vim.diagnostic.config({
+    underline = true,
+    signs = true,
+    virtual_text = true,
+    float = {
+        show_header = true,
+        -- source pour afficher d'où vient le diagnostic
+        source = true,
+        border = 'rounded',
+        focusable = false,
+    },
+    update_in_insert = false, -- default to false
+    severity_sort = false, -- default to false
+})

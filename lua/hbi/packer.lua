@@ -64,10 +64,15 @@ return require('packer').startup(function(use)
   config = function()
       require("toggleterm").setup()
   end}
+  -- git
   use {'lewis6991/gitsigns.nvim'}
   use('tpope/vim-fugitive')
   use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
   use 'nvim-lualine/lualine.nvim'
+  -- ampoule avec action disponibles
+  use {"kosayoda/nvim-lightbulb",
+  requires = "antoinemadec/FixCursorHold.nvim"}
+
   use 'nvim-tree/nvim-tree.lua'
   use {
 	  'neovim/nvim-lspconfig',
@@ -95,7 +100,9 @@ return require('packer').startup(function(use)
   }
   -- debugger
   use 'mfussenegger/nvim-dap'
+  use 'mfussenegger/nvim-dap-python'
 
+  -- zen mode
   use("folke/zen-mode.nvim")
 
   -- Automatically set up your configuration after cloning packer.nvim
