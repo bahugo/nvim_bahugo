@@ -1,7 +1,6 @@
 -- This file can be loaded by calling `lua require('plugins')` from your init.vim
 
 local ensure_packer = function()
-    print("lancement ensure_packer")
     local fn = vim.fn
     local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
     if fn.empty(fn.glob(install_path)) > 0 then
@@ -11,7 +10,6 @@ local ensure_packer = function()
         vim.cmd [[packadd packer.nvim]]
         return true
     end
-    print("packer est déjà présent dans " .. install_path)
     return false
 end
 
@@ -27,13 +25,18 @@ return require('packer').startup(function(use)
 	  -- or                            , branch = '0.1.x',
 	  requires = { {'nvim-lua/plenary.nvim'} }
   }
-
+  use { "catppuccin/nvim",
+  as = "catppuccin",
+  config = function ()
+      vim.cmd('colorscheme catppuccin')
+  end
+  }
   use({
       'rose-pine/neovim',
       as = 'rose-pine',
-      config = function()
-          vim.cmd('colorscheme rose-pine')
-      end
+      -- config = function()
+      --     vim.cmd('colorscheme rose-pine')
+      -- end
   })
   use {
       "folke/which-key.nvim",
@@ -98,6 +101,8 @@ return require('packer').startup(function(use)
           {'folke/neodev.nvim'}
 	  }
   }
+  -- fenetre d'affichage de la structure des fonctions et classes du fichier ouvert
+  use "preservim/tagbar"
   -- debugger
   use 'mfussenegger/nvim-dap'
   use 'mfussenegger/nvim-dap-python'

@@ -57,12 +57,17 @@ local servers = {
     rust_analyzer = {},
     -- tsserver = {},
     pylsp = {
-        pylsp ={
+        pylsp = {
             plugins = {
                 pycodestyle = {
                     -- ignore = {'W391', },
                     maxLineLength = 100
-                }
+                },
+                rope_autoimport = {
+                    enabled = true,
+                },
+                rope_completion = { enabled = true,
+                    eager = true }
             }
         }
     },
@@ -120,7 +125,12 @@ mason_lspconfig.setup_handlers {
 }
 
 -- Turn on lsp status information
-require('fidget').setup()
+require("fidget").setup {
+    window = {
+        blend = 0,
+    },
+    -- ... the rest of your fidget config
+}
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
@@ -164,7 +174,7 @@ cmp.setup {
         { name = 'luasnip' },
     },
 }
-require('nvim-lightbulb').setup({autocmd = {enabled = true}})
+require('nvim-lightbulb').setup({ autocmd = { enabled = true } })
 
 -- Réglage du format d'affichage des diagnostics
 vim.diagnostic.config({
