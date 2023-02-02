@@ -10,7 +10,7 @@ local ensure_packer = function()
         vim.cmd [[packadd packer.nvim]]
         return true
     end
-    return false
+    return true
 end
 
 local packer_bootstrap = ensure_packer()
@@ -113,6 +113,7 @@ return require('packer').startup(function(use)
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
+      print("Synchronisation de packer")
       require('packer').sync()
   end
 end)
