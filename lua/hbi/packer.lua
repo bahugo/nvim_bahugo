@@ -102,7 +102,7 @@ return require('packer').startup(function(use)
 	  }
   }
   -- fenetre d'affichage de la structure des fonctions et classes du fichier ouvert
-  use "preservim/tagbar"
+  use "liuchengxu/vista.vim"
   -- debugger
   use 'mfussenegger/nvim-dap'
   use 'mfussenegger/nvim-dap-python'
