@@ -103,10 +103,20 @@ return require('packer').startup(function(use)
   }
   -- fenetre d'affichage de la structure des fonctions et classes du fichier ouvert
   use "liuchengxu/vista.vim"
-  -- debugger
-  use 'mfussenegger/nvim-dap'
-  use 'mfussenegger/nvim-dap-python'
-
+  -- Debugging
+  use {
+      "mfussenegger/nvim-dap",
+      wants = { "nvim-dap-virtual-text", "nvim-dap-ui", "nvim-dap-python",
+      "which-key.nvim" },
+      requires = {
+          "williamboman/mason.nvim",
+          "theHamsta/nvim-dap-virtual-text",
+          "rcarriga/nvim-dap-ui",
+          "mfussenegger/nvim-dap-python",
+          "nvim-telescope/telescope-dap.nvim",
+          "jbyuki/one-small-step-for-vimkind",
+      },
+  }
   -- zen mode
   use("folke/zen-mode.nvim")
 
