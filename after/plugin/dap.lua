@@ -79,21 +79,26 @@ vim.keymap.set('n', '<Leader>ds', function()
     local widgets = require('dap.ui.widgets')
     widgets.centered_float(widgets.scopes)
 end, { desc = "DAP scopes" })
-dap.adapters.python = {
-    type = 'executable';
-    command = get_debubpy_python();
-    args = { '-m', 'debugpy.adapter' };
-}
 
-dap.configurations.python = {
-    {
-        type = 'python';
-        request = 'launch';
-        name = "Launch file";
-        program = "${file}";
-        pythonPath = resolve_python()
-    },
-}
+local dap_py = require("dap-python")
+dap_py.test_runner = "pytest"
+dap_py.setup(get_debubpy_python())
+dap_py.resolve_python = resolve_python
+-- dap.adapters.python = {
+--     type = 'executable';
+--     command = get_debubpy_python();
+--     args = { '-m', 'debugpy.adapter' };
+-- }
+--
+-- dap.configurations.python = {
+--     {
+--         type = 'python';
+--         request = 'launch';
+--         name = "Launch file";
+--         program = "${file}";
+--         pythonPath = resolve_python()
+--     },
+-- }
 
 dap.configurations.lua = {
     {
