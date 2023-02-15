@@ -60,7 +60,12 @@ local servers = {
         pylsp = {
             plugins = {
                 pycodestyle = {
-                    -- ignore = {'W391', },
+                    ignore = {
+                        -- W391 blank line at end of file
+                        'W391',
+                        -- E402 module level import not at top of file
+                        "E402",
+                    },
                     maxLineLength = 100
                 },
                 rope_autoimport = {
