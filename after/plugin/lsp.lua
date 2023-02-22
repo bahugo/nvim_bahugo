@@ -68,11 +68,15 @@ local servers = {
                     },
                     maxLineLength = 100
                 },
+                pydocstyle = {
+                    enabled = false,
+                    convention = "google",
+                },
                 rope_autoimport = {
                     enabled = true,
                 },
                 rope_completion = { enabled = true,
-                    eager = true }
+                    eager = true },
             }
         }
     },
