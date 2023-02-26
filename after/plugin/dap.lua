@@ -1,10 +1,5 @@
 -- Fonction utilitaires
-local is_windows = function()
-    if (string.sub(vim.loop.os_uname().sysname, 1, 3) == "Win") then
-        return true
-    end
-    return false
-end
+local is_windows = require("hbi.utils").is_windows
 
 local get_sep = function()
     if (is_windows())
