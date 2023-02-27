@@ -82,7 +82,7 @@ local servers = {
     },
     marksman = {},
     omnisharp = {},
-    sumneko_lua = {
+    lua_ls = {
         Lua = {
             workspace = { checkThirdParty = false },
             telemetry = { enable = false },
