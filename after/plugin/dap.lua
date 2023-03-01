@@ -1,13 +1,7 @@
+local path = require("plenary.path")
+
 -- Fonction utilitaires
 local is_windows = require("hbi.utils").is_windows
-
-local get_sep = function()
-    if (is_windows())
-    then
-        return "\\"
-    end
-    return "/"
-end
 
 local get_exe_extension = function()
     if (is_windows())
@@ -18,26 +12,25 @@ local get_exe_extension = function()
 end
 
 local get_debubpy_python = function()
-    local homedir
-    local sep = get_sep()
-    local exe = get_exe_extension()
+    local python_exe
     if (is_windows())
     then
-        homedir = os.getenv("LOCALAPPDATA")
+        python_exe = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", "mason", "packages",
+        "debugpy", "venv", "Scripts", "python.exe")
     else
-        homedir = os.getenv("HOME")
+        python_exe = path:new(os.getenv("HOME"), ".local","share","nvim", "mason", "packages",
+        "debugpy", "venv", "bin", "python")
     end
-    local python_exe = vim.fn.join(
-        { homedir, "nvim-data", "mason", "packages", "debugpy", "venv", "Scripts", "python" .. exe },
-        sep)
-    return python_exe
+    if not path.exists(python_exe) then
+        vim.notify("debugpy introuvable, vérifier qu'il a bien été installé avec mason :"
+        .. python_exe.filename, vim.log.levels.WARN )
+    end
+    return python_exe.filename
 end
 
 local resolve_python = function()
-
-    local sep = get_sep()
     local exe = get_exe_extension()
-    return os.getenv("CONDA_PREFIX") .. sep .. 'python' .. exe
+    return path:new(os.getenv("CONDA_PREFIX"), 'python' .. exe).filename
 end
 
 local dap = require('dap')
