@@ -111,15 +111,6 @@ vim.fn.sign_define("DapBreakpoint", dap_breakpoint.error)
 vim.fn.sign_define("DapStopped", dap_breakpoint.stopped)
 vim.fn.sign_define("DapBreakpointRejected", dap_breakpoint.rejected)
 
--- local dap_py = require("dap-python")
-
--- dap_py.setup(resolve_python())
--- dap_py.setup()
--- dap_py.setup("python")
--- dap_py.test_runner = "pytest"
-
--- on regle pytest en tant que test runner pour python
--- dap_py.test_runner = "pytest"
 
 require("nvim-dap-virtual-text").setup {
     commented = true,
