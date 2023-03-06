@@ -56,6 +56,20 @@ local servers = {
     -- pyright = {},
     rust_analyzer = {},
     -- tsserver = {},
+    ruff_lsp = {
+        init_options = {
+            filetypes = {"python", ".mess", ".output" },
+            settings = {
+                -- Any extra CLI arguments for `ruff` go here.
+                args = {},
+                -- args = { "--select ALL" },
+                -- args = { "--select ALL --ignore E402" },
+                organizeImports = false,
+                -- showNotification = "on",
+                fixAll = true,
+            },
+        },
+    },
     pylsp = {
         pylsp = {
             plugins = {
@@ -75,8 +89,10 @@ local servers = {
                 rope_autoimport = {
                     enabled = true,
                 },
-                rope_completion = { enabled = true,
-                    eager = true },
+                rope_completion = {
+                    enabled = true,
+                    eager = true
+                },
             }
         }
     },
@@ -125,6 +141,16 @@ mason_lspconfig.setup_handlers {
     function(server_name)
         -- print("lspconfig setup " .. server_name)
         -- print(tostring(vim.fn.json_encode(servers[server_name])))
+        if server_name == "ruff_lsp" then
+            require('lspconfig').ruff_lsp.setup {
+                capabilities = capabilities,
+                on_attach = on_attach,
+                init_options = servers.ruff_lsp.init_options,
+                root_dir = require("lspconfig").util.find_git_ancestor,
+            }
+            return
+        end
+
         require('lspconfig')[server_name].setup {
             capabilities = capabilities,
             on_attach = on_attach,
@@ -152,14 +178,14 @@ cmp.setup {
         end,
     },
     mapping = cmp.mapping.preset.insert {
-        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete(),
-        ['<CR>'] = cmp.mapping.confirm {
+            ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+            ['<C-f>'] = cmp.mapping.scroll_docs(4),
+            ['<C-Space>'] = cmp.mapping.complete(),
+            ['<CR>'] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
         },
-        ['<Tab>'] = cmp.mapping(function(fallback)
+            ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
@@ -168,7 +194,7 @@ cmp.setup {
                 fallback()
             end
         end, { 'i', 's' }),
-        ['<S-Tab>'] = cmp.mapping(function(fallback)
+            ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then
@@ -198,5 +224,5 @@ vim.diagnostic.config({
         focusable = false,
     },
     update_in_insert = false, -- default to false
-    severity_sort = false, -- default to false
+    severity_sort = false,    -- default to false
 })
