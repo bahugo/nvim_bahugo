@@ -144,19 +144,21 @@ mason_lspconfig.setup {
 
 local warn_if_pylsp_plugins_are_not_installed = function()
     local ruff_exe
-    local python_lsp_bin = path:new("mason", "packages", "python-lsp-server", "venv", "bin")
+    local python_lsp_venv = path:new("mason", "packages", "python-lsp-server", "venv")
     if (require("hbi.utils").is_windows())
 
     then
-        ruff_exe = path:new(os.getenv("LOCALAPPDATA"), python_lsp_bin, "ruff.exe")
+        ruff_exe = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "Scripts", "ruff.exe")
     else
-        ruff_exe = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_bin, "ruff")
+        ruff_exe = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_venv, "bin", "ruff")
     end
     if not path.exists(ruff_exe) then
+        vim.notify(tostring(ruff_exe), vim.log.levels.WARN, {})
         vim.notify(
             'Pour bénéficier des linters python, il faut installer manuellement les plugins pylsp \n' ..
             'supplémentaires en tapant la commande suivante: \n' ..
             ':PylspInstall python-lsp-ruff pylsp-rope pylsp-mypy',
+
             vim.log.levels.WARN, {})
     end
 end
@@ -196,14 +198,14 @@ cmp.setup {
         end,
     },
     mapping = cmp.mapping.preset.insert {
-            ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-            ['<C-f>'] = cmp.mapping.scroll_docs(4),
-            ['<C-Space>'] = cmp.mapping.complete(),
-            ['<CR>'] = cmp.mapping.confirm {
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<CR>'] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
         },
-            ['<Tab>'] = cmp.mapping(function(fallback)
+        ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
@@ -212,7 +214,7 @@ cmp.setup {
                 fallback()
             end
         end, { 'i', 's' }),
-            ['<S-Tab>'] = cmp.mapping(function(fallback)
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then
@@ -242,19 +244,18 @@ vim.diagnostic.config({
         focusable = false,
     },
     update_in_insert = false, -- default to false
-    severity_sort = false,    -- default to false
+    severity_sort = false, -- default to false
 })
 
 local sign = function(opts)
-  vim.fn.sign_define(opts.name, {
-    texthl = opts.name,
-    text = opts.text,
-    numhl = ''
-  })
+    vim.fn.sign_define(opts.name, {
+        texthl = opts.name,
+        text = opts.text,
+        numhl = ''
+    })
 end
 
-sign({name = 'DiagnosticSignError', text = '✘'})
-sign({name = 'DiagnosticSignWarn', text = '▲'})
-sign({name = 'DiagnosticSignHint', text = '⚑'})
-sign({name = 'DiagnosticSignInfo', text = ''})
-
+sign({ name = 'DiagnosticSignError', text = '✘' })
+sign({ name = 'DiagnosticSignWarn', text = '▲' })
+sign({ name = 'DiagnosticSignHint', text = '⚑' })
+sign({ name = 'DiagnosticSignInfo', text = '' })
