@@ -1,3 +1,4 @@
+local path = require("plenary.path")
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -53,27 +54,35 @@ local servers = {
     -- LSP servers
     -- clangd = {},
     -- gopls = {},
-    -- pyright = {},
     rust_analyzer = {},
     -- tsserver = {},
-    ruff_lsp = {
-        init_options = {
-            filetypes = {"python", ".mess", ".output" },
-            settings = {
-                -- Any extra CLI arguments for `ruff` go here.
-                args = {},
-                -- args = { "--select ALL" },
-                -- args = { "--select ALL --ignore E402" },
-                organizeImports = false,
-                -- showNotification = "on",
-                fixAll = true,
-            },
-        },
-    },
     pylsp = {
         pylsp = {
             plugins = {
+                -- pour ruff voir doc https://github.com/python-lsp/python-lsp-ruff
+                ruff = {
+                    enabled = true,
+                    lineLength = 100,
+                    ignore = {
+                        -- E402 module level import not at top of file
+                        "E402",
+                    },
+
+                },
+                pyflakes = {
+                    enabled = false,
+                },
+                yapf = {
+                    enabled = false,
+                },
+                autopep8 = {
+                    enabled = false,
+                },
+                mccabe = {
+                    enabled = false,
+                },
                 pycodestyle = {
+                    enabled = false,
                     ignore = {
                         -- W391 blank line at end of file
                         'W391',
@@ -87,10 +96,10 @@ local servers = {
                     convention = "google",
                 },
                 rope_autoimport = {
-                    enabled = true,
+                    enabled = false,
                 },
                 rope_completion = {
-                    enabled = true,
+                    enabled = false,
                     eager = true
                 },
             }
@@ -109,15 +118,10 @@ local servers = {
     },
     -- -- Linter servers
     -- sqlfluff = {},
-    -- pydocstyle = {},
     -- markdownlint = {},
-    -- mypy = {},
-    -- pylint = {},
     -- yamllint = {},
     -- -- DAP servers
     -- debugpy = {},
-    -- -- Formaters servers
-    -- black = {},
 }
 
 require("neodev").setup()
@@ -132,25 +136,39 @@ require('mason').setup()
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
 
+
 mason_lspconfig.setup {
     ensure_installed = vim.tbl_keys(servers),
     automatic_installation = true
 }
 
+local warn_if_pylsp_plugins_are_not_installed = function()
+    local ruff_exe
+    local python_lsp_bin = path:new("mason", "packages", "python-lsp-server", "venv", "bin")
+    if (require("hbi.utils").is_windows())
+
+    then
+        ruff_exe = path:new(os.getenv("LOCALAPPDATA"), python_lsp_bin, "ruff.exe")
+    else
+        ruff_exe = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_bin, "ruff")
+    end
+    if not path.exists(ruff_exe) then
+        vim.notify(
+            'Pour bénéficier des linters python, il faut installer manuellement les plugins pylsp \n' ..
+            'supplémentaires en tapant la commande suivante: \n' ..
+            ':PylspInstall python-lsp-ruff pylsp-rope pylsp-mypy',
+            vim.log.levels.WARN, {})
+    end
+end
+
+
 mason_lspconfig.setup_handlers {
     function(server_name)
+        if server_name == "pylsp" then
+            warn_if_pylsp_plugins_are_not_installed()
+        end
         -- print("lspconfig setup " .. server_name)
         -- print(tostring(vim.fn.json_encode(servers[server_name])))
-        if server_name == "ruff_lsp" then
-            require('lspconfig').ruff_lsp.setup {
-                capabilities = capabilities,
-                on_attach = on_attach,
-                init_options = servers.ruff_lsp.init_options,
-                root_dir = require("lspconfig").util.find_git_ancestor,
-            }
-            return
-        end
-
         require('lspconfig')[server_name].setup {
             capabilities = capabilities,
             on_attach = on_attach,
@@ -226,3 +244,17 @@ vim.diagnostic.config({
     update_in_insert = false, -- default to false
     severity_sort = false,    -- default to false
 })
+
+local sign = function(opts)
+  vim.fn.sign_define(opts.name, {
+    texthl = opts.name,
+    text = opts.text,
+    numhl = ''
+  })
+end
+
+sign({name = 'DiagnosticSignError', text = '✘'})
+sign({name = 'DiagnosticSignWarn', text = '▲'})
+sign({name = 'DiagnosticSignHint', text = '⚑'})
+sign({name = 'DiagnosticSignInfo', text = ''})
+

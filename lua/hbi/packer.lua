@@ -7,7 +7,7 @@ local ensure_packer = function()
         print("clonage de packer.nvim dans " .. install_path)
         fn.system({ 'git', 'clone', '--depth', '1',
             'https://github.com/wbthomason/packer.nvim', install_path })
-        -- vim.cmd [[packadd packer.nvim]]
+        vim.cmd([[packadd packer.nvim]])
         return true
     end
     return true
