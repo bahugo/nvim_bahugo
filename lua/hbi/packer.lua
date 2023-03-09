@@ -26,6 +26,7 @@ return require('packer').startup(function(use)
     }
     use {
         "AckslD/nvim-neoclip.lua",
+        'nvim-telescope/telescope-ui-select.nvim',
         requires = {
             { 'nvim-telescope/telescope.nvim' },
         },
