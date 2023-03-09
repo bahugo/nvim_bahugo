@@ -1,4 +1,4 @@
-local is_windows = require("hbi.utils").is_windows
+local is_windows = require("bahugo_conf.utils").is_windows
 
 local status_ok, toggleterm = pcall(require, "toggleterm")
 if not status_ok then

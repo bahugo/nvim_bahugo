@@ -1,7 +1,7 @@
 local path = require("plenary.path")
 
 -- Fonction utilitaires
-local is_windows = require("hbi.utils").is_windows
+local is_windows = require("bahugo_conf.utils").is_windows
 
 local get_exe_extension = function()
     if (is_windows())

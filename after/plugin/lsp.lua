@@ -152,7 +152,7 @@ mason_lspconfig.setup {
 local warn_if_pylsp_plugins_are_not_installed = function()
     local ruff_exe
     local python_lsp_venv = path:new("mason", "packages", "python-lsp-server", "venv")
-    if (require("hbi.utils").is_windows())
+    if (require("bahugo_conf.utils").is_windows())
 
     then
         ruff_exe = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "Scripts", "ruff.exe")

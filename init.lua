@@ -1,2 +1,2 @@
-require("hbi")
+require("bahugo_conf")
 

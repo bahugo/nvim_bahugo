@@ -1,53 +1,37 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
-
-local ensure_packer = function()
-    local fn = vim.fn
-    local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-    if fn.empty(fn.glob(install_path)) > 0 then
-        print("clonage de packer.nvim dans " .. install_path)
-        fn.system({ 'git', 'clone', '--depth', '1',
-            'https://github.com/wbthomason/packer.nvim', install_path })
-        vim.cmd([[packadd packer.nvim]])
-        return true
-    end
-    return true
-end
-
-local packer_bootstrap = ensure_packer()
-
-
-return require('packer').startup(function(use)
+return {
     -- Packer can manage itself
-    use 'wbthomason/packer.nvim'
+    'wbthomason/packer.nvim',
 
-    use {
-        'nvim-telescope/telescope.nvim', branch = '0.1.x',
-        requires = { { 'nvim-lua/plenary.nvim' } }
-    }
-    use {
+    {
+        'nvim-telescope/telescope.nvim',
+        branch = '0.1.x',
+        dependencies = { { 'nvim-lua/plenary.nvim' } }
+    },
+    {
         "AckslD/nvim-neoclip.lua",
         'nvim-telescope/telescope-ui-select.nvim',
-        requires = {
+        dependencies = {
             { 'nvim-telescope/telescope.nvim' },
         },
         config = function()
             require('neoclip').setup()
         end,
-    }
-    use { "catppuccin/nvim",
-        as = "catppuccin",
+    },
+    {
+        "catppuccin/nvim",
+        name = "catppuccin",
         config = function()
             vim.cmd('colorscheme catppuccin')
         end
-    }
-    use({
+    },
+    ({
         'rose-pine/neovim',
-        as = 'rose-pine',
+        name = 'rose-pine',
         -- config = function()
         --     vim.cmd('colorscheme rose-pine')
         -- end
-    })
-    use {
+    }),
+    {
         "folke/which-key.nvim",
         config = function()
             require("which-key").setup {
@@ -56,10 +40,10 @@ return require('packer').startup(function(use)
                 -- refer to the configuration section below
             }
         end
-    }
-    use {
+    },
+    {
         "folke/trouble.nvim",
-        requires = "nvim-tree/nvim-web-devicons",
+        dependencies = "nvim-tree/nvim-web-devicons",
         config = function()
             require("trouble").setup {
                 -- your configuration comes here
@@ -67,39 +51,44 @@ return require('packer').startup(function(use)
                 -- refer to the configuration section below
             }
         end
-    }
-    use {
+    },
+    {
         -- Highlight, edit, and navigate code
         'nvim-treesitter/nvim-treesitter',
         run = function()
             pcall(require('nvim-treesitter.install').update { with_sync = true })
         end,
-    }
-    use {
+    },
+    {
         -- Additional text objects via treesitter
         'nvim-treesitter/nvim-treesitter-textobjects',
-        after = 'nvim-treesitter',
-    }
-    use('nvim-treesitter/playground')
-    use('theprimeagen/harpoon')
-    use('mbbill/undotree')
-    use { "akinsho/toggleterm.nvim", tag = '*',
+        -- after = 'nvim-treesitter',
+    },
+    ('nvim-treesitter/playground'),
+    ('theprimeagen/harpoon'),
+    ('mbbill/undotree'),
+    {
+        "akinsho/toggleterm.nvim",
+        version = '*',
         config = function()
             require("toggleterm").setup()
-        end }
+        end
+    },
     -- git
-    use { 'lewis6991/gitsigns.nvim' }
-    use('tpope/vim-fugitive')
-    use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
-    use 'nvim-lualine/lualine.nvim'
+    { 'lewis6991/gitsigns.nvim' },
+    ('tpope/vim-fugitive'),
+    'numToStr/Comment.nvim', -- "gc" to comment visual regions/lines
+    'nvim-lualine/lualine.nvim',
     -- ampoule avec action disponibles
-    use { "kosayoda/nvim-lightbulb",
-        requires = "antoinemadec/FixCursorHold.nvim" }
+    {
+        "kosayoda/nvim-lightbulb",
+        dependencies = "antoinemadec/FixCursorHold.nvim"
+    },
 
-    use 'nvim-tree/nvim-tree.lua'
-    use {
+    'nvim-tree/nvim-tree.lua',
+    {
         'neovim/nvim-lspconfig',
-        requires = {
+        dependencies = {
             -- LSP Support
             { 'williamboman/mason.nvim' },
             { 'williamboman/mason-lspconfig.nvim' },
@@ -120,22 +109,22 @@ return require('packer').startup(function(use)
             -- Additional lua configuration for nvim
             { 'folke/neodev.nvim' }
         }
-    }
-    use {
+    },
+    {
         "ThePrimeagen/refactoring.nvim",
-        requires = {
+        dependencies = {
             { "nvim-lua/plenary.nvim" },
             { "nvim-treesitter/nvim-treesitter" }
         }
-    }
+    },
     -- fenetre d'affichage de la structure des fonctions et classes du fichier ouvert
-    use "liuchengxu/vista.vim"
+    "liuchengxu/vista.vim",
     -- Debugging
-    use {
+    {
         "mfussenegger/nvim-dap",
-        wants = { "nvim-dap-virtual-text", "nvim-dap-ui", "nvim-dap-python",
-            "which-key.nvim" },
-        requires = {
+        -- wants = { "nvim-dap-virtual-text", "nvim-dap-ui", "nvim-dap-python",
+        --     "which-key.nvim" },
+        dependencies = {
             "williamboman/mason.nvim",
             "theHamsta/nvim-dap-virtual-text",
             "rcarriga/nvim-dap-ui",
@@ -143,14 +132,7 @@ return require('packer').startup(function(use)
             "nvim-telescope/telescope-dap.nvim",
             "jbyuki/one-small-step-for-vimkind",
         },
-    }
+    },
     -- zen mode
-    use("folke/zen-mode.nvim")
-
-    -- Automatically set up your configuration after cloning packer.nvim
-    -- Put this at the end after all plugins
-    if packer_bootstrap then
-        print("Synchronisation de packer")
-        require('packer').sync()
-    end
-end)
+    ("folke/zen-mode.nvim"),
+}
