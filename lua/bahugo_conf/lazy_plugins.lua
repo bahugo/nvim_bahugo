@@ -117,6 +117,13 @@ return {
             { "nvim-treesitter/nvim-treesitter" }
         }
     },
+    {
+        "simrat39/rust-tools.nvim",
+        dependencies = {
+            'neovim/nvim-lspconfig',
+            "mfussenegger/nvim-dap",
+        }
+    },
     -- fenetre d'affichage de la structure des fonctions et classes du fichier ouvert
     "liuchengxu/vista.vim",
     -- Debugging
