@@ -187,17 +187,17 @@ mason_lspconfig.setup_handlers {
     end,
 }
 
-local rt = require("rust-tools")
 local on_attach_rust = function(_, bufnr)
+    local rt = require("rust-tools")
     on_attach(_, bufnr)
     -- Hover actions
-    nmap("<C-space>", rt.hover_actions.hover_actions, "Rust hover action" )
+    nmap("<leader-h>", rt.hover_actions.hover_actions, "Rust hover action" )
     -- Code action groups
-    nmap("<Leader>ca", rt.code_action_group.code_action_group, "Rust [C]ode [A]ction")
+    nmap("<leader>ca", rt.code_action_group.code_action_group, "Rust [C]ode [A]ction")
 
 end
 
-rt.setup({
+require("rust-tools").setup({
     server = {
         on_attach = on_attach_rust
     },

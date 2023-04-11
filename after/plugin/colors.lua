@@ -4,7 +4,7 @@ require("catppuccin").setup({
         light = "latte",
         dark = "mocha",
     },
-    transparent_background = true,
+    transparent_background = false,
     -- show_end_of_buffer = false, -- show the '~' characters after the end of buffers
     -- term_colors = false,
     -- dim_inactive = {
@@ -28,7 +28,13 @@ require("catppuccin").setup({
     --     types = {},
     --     operators = {},
     -- },
-    -- color_overrides = {},
+    color_overrides = {
+				mocha = {
+					base = "#11111b",
+					mantle = "#11111b",
+					crust = "#11111b",
+				},
+			},
     -- custom_highlights = {},
     integrations = {
         cmp = true,
@@ -51,8 +57,8 @@ function ColorMyPencils(color)
 	-- color = color or "rose-pine"
 	vim.cmd.colorscheme(color)
 
-    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+ --    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+	-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
 end
 
