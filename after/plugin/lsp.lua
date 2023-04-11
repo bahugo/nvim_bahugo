@@ -1,4 +1,18 @@
 local path = require("plenary.path")
+
+local generic_map = function(keys, func, desc, mode)
+    if desc then
+        desc = 'LSP: ' .. desc
+    end
+    vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = desc })
+end
+local vmap = function(keys, func, desc)
+    generic_map(keys, func, desc, "v")
+end
+local nmap = function(keys, func, desc)
+    generic_map(keys, func, desc, "n")
+end
+
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -8,18 +22,6 @@ local on_attach = function(_, bufnr)
     --
     -- In this case, we create a function that lets us more easily define mappings specific
     -- for LSP related items. It sets the mode, buffer and description for us each time.
-    local generic_map = function(keys, func, desc, mode)
-        if desc then
-            desc = 'LSP: ' .. desc
-        end
-        vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = desc })
-    end
-    local vmap = function(keys, func, desc)
-        generic_map(keys, func, desc, "v")
-    end
-    local nmap = function(keys, func, desc)
-        generic_map(keys, func, desc, "n")
-    end
 
     vmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
@@ -45,7 +47,6 @@ local on_attach = function(_, bufnr)
     nmap('<leader>wl', function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, '[W]orkspace [L]ist Folders')
-
     -- Create a command `:Format` local to the LSP buffer
     vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
         vim.lsp.buf.format()
@@ -185,6 +186,22 @@ mason_lspconfig.setup_handlers {
         }
     end,
 }
+
+local rt = require("rust-tools")
+local on_attach_rust = function(_, bufnr)
+    on_attach(_, bufnr)
+    -- Hover actions
+    nmap("<C-space>", rt.hover_actions.hover_actions, "Rust hover action" )
+    -- Code action groups
+    nmap("<Leader>ca", rt.code_action_group.code_action_group, "Rust [C]ode [A]ction")
+
+end
+
+rt.setup({
+    server = {
+        on_attach = on_attach_rust
+    },
+})
 
 -- Turn on lsp status information
 require("fidget").setup {

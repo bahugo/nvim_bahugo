@@ -84,20 +84,73 @@ dap.adapters.codelldb = {
     -- detached = false,
   }
 }
-dap.configurations.cpp = {
-  {
-    name = "Launch file",
-    type = "codelldb",
-    request = "launch",
-    program = function()
-      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-    end,
-    cwd = '${workspaceFolder}',
-    stopOnEntry = false,
-  },
+dap.configurations.rust = {
+    {
+        name = "Launch",
+        type = "codelldb",
+        request = "launch",
+        -- This is where cargo outputs the executable
+        program = function ()
+            -- os.execute("cargo build &> /dev/null")
+            return vim.api.nvim_buf_get_name(0)
+            -- return "target/debug/${workspaceFolderBasename}"
+        end,
+        args = {"test", "--no-run", "--lib"},
+        cwd = "${workspaceFolder}",
+        -- Uncomment if you want to stop at main
+        -- stopOnEntry = true,
+        -- MIMode = "gdb",
+        -- miDebuggerPath = "/usr/bin/gdb",
+        -- setupCommands = {
+        --     {
+        --         text = "-enable-pretty-printing",
+        --         description = "enable pretty printing",
+        --         ignoreFailures = false,
+        --     },
+        -- },
+    },
 }
-dap.configurations.c = dap.configurations.cpp
-dap.configurations.rust = dap.configurations.cpp
+
+-- dap.configurations.rust = {
+--   {
+--     name = "Launch file",
+--     type = "codelldb",
+--     request = "launch",
+--     program = function()
+--       return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+--     end,
+--     cwd = '${workspaceFolder}',
+--     stopOnEntry = false,
+--   },
+--   {
+--     name = "Launch current file",
+--     type = "codelldb",
+--     request = "launch",
+--     program = function()
+--       return vim.api.nvim_buf_get_name(0)
+--     end,
+--     cwd = '${workspaceFolder}',
+--     stopOnEntry = false,
+--   },
+-- {
+--     name = "Debug file",
+--     type= "codelldb",
+--     request= "launch",
+--     cargo= {
+--         args= { "test", "--no-run", "--lib"},      -- Cargo command line to build the debug target
+--                                                     -- "args": ["build", "--bin=foo"] is another possibility
+--         -- The rest are optional
+--         -- env= { RUSTFLAGS= "-Clinker=ld.mold" }, -- Extra environment variables.
+--         -- problemMatcher= "$rustc",                 -- Problem matcher(s) to apply to cargo output.
+--         -- filter= {                                 -- Filter applied to compilation artifacts.
+--         --     name= "mylib",
+--         --     kind= "lib"
+--         -- }
+--     }
+-- }
+-- }
+-- dap.configurations.c = dap.configurations.cpp
+-- dap.configurations.rust = dap.configurations.cpp
 dap.configurations.lua = {
     {
         type = 'nlua',
