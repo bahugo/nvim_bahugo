@@ -195,12 +195,22 @@ local on_attach_rust = function(_, bufnr)
     nmap("<leader>ca", require("rust-tools").code_action_group.code_action_group, "Rust [C]ode [A]ction")
 
 end
+-- Update this path
+local extension_path = vim.env.HOME .. '/.vscode/extensions/vadimcn.vscode-lldb-1.6.7/'
+local codelldb_path = extension_path .. 'adapter/codelldb.exe' -- pour linux sans extension
+local liblldb_path = extension_path .. 'lldb/lib/liblldb.lib'  -- pour linux .so
 
-require("rust-tools").setup({
+local opts_rt = {
     server = {
         on_attach = on_attach_rust
     },
-})
+    -- ... other configs
+    dap = {
+        adapter = require('rust-tools.dap').get_codelldb_adapter(
+            codelldb_path, liblldb_path)
+    }
+}
+require("rust-tools").setup(opts_rt)
 
 -- Turn on lsp status information
 require("fidget").setup {
