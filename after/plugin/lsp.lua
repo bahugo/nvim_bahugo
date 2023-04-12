@@ -153,9 +153,7 @@ mason_lspconfig.setup {
 local warn_if_pylsp_plugins_are_not_installed = function()
     local ruff_exe
     local python_lsp_venv = path:new("mason", "packages", "python-lsp-server", "venv")
-    if (require("bahugo_conf.utils").is_windows())
-
-    then
+    if (require("bahugo_conf.utils").is_windows()) then
         ruff_exe = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "Scripts", "ruff.exe")
     else
         ruff_exe = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_venv, "bin", "ruff")
@@ -190,15 +188,23 @@ mason_lspconfig.setup_handlers {
 local on_attach_rust = function(_, bufnr)
     on_attach(_, bufnr)
     -- Hover actions
-    nmap("<leader-h>", require('rust-tools').hover_actions.hover_actions, "Rust hover action" )
+    nmap("<leader-ha>", require('rust-tools').hover_actions.hover_actions, "Rust hover action" )
     -- Code action groups
     nmap("<leader>ca", require("rust-tools").code_action_group.code_action_group, "Rust [C]ode [A]ction")
 
 end
--- Update this path
-local extension_path = vim.env.HOME .. '/.vscode/extensions/vadimcn.vscode-lldb-1.6.7/'
-local codelldb_path = extension_path .. 'adapter/codelldb.exe' -- pour linux sans extension
-local liblldb_path = extension_path .. 'lldb/lib/liblldb.lib'  -- pour linux .so
+local extension_path
+local codelldb_path
+local liblldb_path
+if (require("bahugo_conf.utils").is_windows()) then
+    extension_path = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", "mason", "packages", "codelldb", "extension")
+    codelldb_path = path:new(extension_path,'adapter', 'codelldb.exe') -- pour linux sans extension
+    liblldb_path = path:new(extension_path, 'lldb', 'lib', 'liblldb.lib')  -- pour linux .so
+else
+    extension_path = path:new(os.getenv("HOME"), ".local", "share", "nvim","mason", "packages", "codelldb", "extension")
+    codelldb_path = path:new(extension_path,'adapter', 'codelldb') -- pour linux sans extension
+    liblldb_path = path:new(extension_path, 'lldb', 'lib', 'liblldb.so')  -- pour linux .so
+end
 
 local opts_rt = {
     server = {
@@ -206,8 +212,8 @@ local opts_rt = {
     },
     -- ... other configs
     dap = {
-        adapter = require('rust-tools.dap').get_codelldb_adapter(
-            codelldb_path, liblldb_path)
+        adapter = require('rust-tools.dap').get_codelldb_adapter( codelldb_path.filename,
+        liblldb_path.filename)
     }
 }
 require("rust-tools").setup(opts_rt)
