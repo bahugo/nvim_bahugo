@@ -6,6 +6,7 @@ local generic_map = function(keys, func, desc, mode)
     end
     vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = desc })
 end
+
 local vmap = function(keys, func, desc)
     generic_map(keys, func, desc, "v")
 end
@@ -44,13 +45,17 @@ local on_attach = function(_, bufnr)
     nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
     nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
     nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-    nmap('<leader>wl', function()
-        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, '[W]orkspace [L]ist Folders')
+    nmap('<leader>wl',
+        function()
+            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+        end,
+    '[W]orkspace [L]ist Folders')
     -- Create a command `:Format` local to the LSP buffer
-    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-        vim.lsp.buf.format()
-    end, { desc = 'Format current buffer with LSP' })
+    vim.api.nvim_buf_create_user_command(bufnr, 'Format',
+        function(_)
+            vim.lsp.buf.format()
+        end,
+    { desc = 'Format current buffer with LSP' })
 end
 
 -- Enable the following language servers
@@ -193,9 +198,11 @@ local on_attach_rust = function(_, bufnr)
     nmap("<leader>ca", require("rust-tools").code_action_group.code_action_group, "Rust [C]ode [A]ction")
 
 end
+
 local extension_path
 local codelldb_path
 local liblldb_path
+
 if (require("bahugo_conf.utils").is_windows()) then
     extension_path = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", "mason", "packages", "codelldb", "extension")
     codelldb_path = path:new(extension_path,'adapter', 'codelldb.exe') -- pour linux sans extension
@@ -207,15 +214,23 @@ else
 end
 
 local opts_rt = {
-    server = {
-        on_attach = on_attach_rust
-    },
-    -- ... other configs
-    dap = {
-        adapter = require('rust-tools.dap').get_codelldb_adapter( codelldb_path.filename,
-        liblldb_path.filename)
-    }
+    tools = { -- rust-tools options
+
+    -- how to execute terminal commands
+    -- options right now: termopen / quickfix
+    executor = require("rust-tools.executors").quickfix
+},
+server = {
+    on_attach = on_attach_rust
+},
+-- ... other configs
+dap = {
+    adapter = require('rust-tools.dap').get_codelldb_adapter(
+    codelldb_path.filename,
+    liblldb_path.filename)
 }
+}
+
 require("rust-tools").setup(opts_rt)
 
 -- Turn on lsp status information
@@ -268,6 +283,7 @@ cmp.setup {
         { name = 'luasnip' },
     },
 }
+
 require('nvim-lightbulb').setup({ autocmd = { enabled = true } })
 
 -- Réglage du format d'affichage des diagnostics
@@ -298,3 +314,4 @@ sign({ name = 'DiagnosticSignError', text = '✘' })
 sign({ name = 'DiagnosticSignWarn', text = '▲' })
 sign({ name = 'DiagnosticSignHint', text = '⚑' })
 sign({ name = 'DiagnosticSignInfo', text = '' })
+

@@ -72,45 +72,45 @@ local dap_py = require("dap-python")
 dap_py.setup(get_debubpy_python())
 dap_py.resolve_python = resolve_python
 dap_py.test_runner = "pytest"
-dap.adapters.codelldb = {
-  type = 'server',
-  port = "${port}",
-  executable = {
-    -- CHANGE THIS to your path!
-    command = '~/.local/share/nvim/mason/packages/codelldb/extension/adapter/codelldb',
-    args = {"--port", "${port}"},
-
-    -- On windows you may have to uncomment this:
-    -- detached = false,
-  }
-}
-dap.configurations.rust = {
-    {
-        name = "Launch",
-        type = "codelldb",
-        request = "launch",
-        -- This is where cargo outputs the executable
-        program = function ()
-            -- os.execute("cargo build &> /dev/null")
-            return vim.api.nvim_buf_get_name(0)
-            -- return "target/debug/${workspaceFolderBasename}"
-        end,
-        args = {"test", "--no-run", "--lib"},
-        cwd = "${workspaceFolder}",
-        -- Uncomment if you want to stop at main
-        -- stopOnEntry = true,
-        -- MIMode = "gdb",
-        -- miDebuggerPath = "/usr/bin/gdb",
-        -- setupCommands = {
-        --     {
-        --         text = "-enable-pretty-printing",
-        --         description = "enable pretty printing",
-        --         ignoreFailures = false,
-        --     },
-        -- },
-    },
-}
-
+-- dap.adapters.codelldb = {
+--   type = 'server',
+--   port = "${port}",
+--   executable = {
+--     -- CHANGE THIS to your path!
+--     command = '~/.local/share/nvim/mason/packages/codelldb/extension/adapter/codelldb',
+--     args = {"--port", "${port}"},
+--
+--     -- On windows you may have to uncomment this:
+--     -- detached = false,
+--   }
+-- }
+-- dap.configurations.rust = {
+--     {
+--         name = "Launch",
+--         type = "codelldb",
+--         request = "launch",
+--         -- This is where cargo outputs the executable
+--         program = function ()
+--             -- os.execute("cargo build &> /dev/null")
+--             return vim.api.nvim_buf_get_name(0)
+--             -- return "target/debug/${workspaceFolderBasename}"
+--         end,
+--         args = {"test", "--no-run", "--lib"},
+--         cwd = "${workspaceFolder}",
+--         -- Uncomment if you want to stop at main
+--         -- stopOnEntry = true,
+--         -- MIMode = "gdb",
+--         -- miDebuggerPath = "/usr/bin/gdb",
+--         -- setupCommands = {
+--         --     {
+--         --         text = "-enable-pretty-printing",
+--         --         description = "enable pretty printing",
+--         --         ignoreFailures = false,
+--         --     },
+--         -- },
+--     },
+-- }
+--
 -- dap.configurations.rust = {
 --   {
 --     name = "Launch file",
