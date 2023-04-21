@@ -124,6 +124,15 @@ return {
             "mfussenegger/nvim-dap",
         }
     },
+    {
+        -- plugin pour la gestion des dépendances rust
+        'saecki/crates.nvim',
+        -- lazyloading
+        event = { "BufRead Cargo.toml" },
+        config= function ()
+            require("crates").setup()
+        end,
+    },
     -- fenetre d'affichage de la structure des fonctions et classes du fichier ouvert
     "liuchengxu/vista.vim",
     -- Debugging
