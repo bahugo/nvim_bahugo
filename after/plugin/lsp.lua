@@ -14,6 +14,15 @@ local nmap = function(keys, func, desc)
     generic_map(keys, func, desc, "n")
 end
 
+-- set custom filetypes using autocmd (will be executed when events will be triggered
+vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
+    pattern = { "*.comm", "*.mess" },
+    callback = function()
+        vim.cmd("setfiletype python")
+    end
+}
+)
+
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -177,16 +186,17 @@ end
 
 mason_lspconfig.setup_handlers {
     function(server_name)
+        local config_handlers = {
+            capabilities = capabilities,
+            on_attach = on_attach,
+            settings = servers[server_name],
+        }
         if server_name == "pylsp" then
             warn_if_pylsp_plugins_are_not_installed()
         end
         -- print("lspconfig setup " .. server_name)
         -- print(vim.inspect(servers[server_name]))
-        require('lspconfig')[server_name].setup {
-            capabilities = capabilities,
-            on_attach = on_attach,
-            settings = servers[server_name],
-        }
+        require('lspconfig')[server_name].setup(config_handlers)
     end,
 }
 

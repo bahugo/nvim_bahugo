@@ -15,7 +15,7 @@ vim.opt.wrap = false
 vim.opt.swapfile = false
 vim.opt.backup = false
 
-if(string.sub(vim.loop.os_uname().sysname, 1, 3) == "Win")
+if (string.sub(vim.loop.os_uname().sysname, 1, 3) == "Win")
 then
     vim.opt.undodir = os.getenv("LOCALAPPDATA") .. "\\.vim\\undodir"
 else
@@ -37,4 +37,3 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "100"
 vim.opt.clipboard = "unnamedplus"
-
