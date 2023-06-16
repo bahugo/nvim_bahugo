@@ -22,6 +22,13 @@ vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
     end
 }
 )
+vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
+    pattern = { "*.qml" },
+    callback = function()
+        vim.cmd("setfiletype qmljs")
+    end
+}
+)
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
@@ -58,13 +65,13 @@ local on_attach = function(_, bufnr)
         function()
             print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
         end,
-    '[W]orkspace [L]ist Folders')
+        '[W]orkspace [L]ist Folders')
     -- Create a command `:Format` local to the LSP buffer
     vim.api.nvim_buf_create_user_command(bufnr, 'Format',
         function(_)
             vim.lsp.buf.format()
         end,
-    { desc = 'Format current buffer with LSP' })
+        { desc = 'Format current buffer with LSP' })
 end
 
 -- Enable the following language servers
@@ -78,6 +85,7 @@ local servers = {
     -- gopls = {},
     rust_analyzer = {},
     -- tsserver = {},
+    -- for numpy completion please install numpydoc
     pylsp = {
         pylsp = {
             plugins = {
@@ -89,7 +97,6 @@ local servers = {
                         -- E402 module level import not at top of file
                         "E402",
                     },
-
                 },
                 pyflakes = {
                     enabled = false,
@@ -183,7 +190,6 @@ local warn_if_pylsp_plugins_are_not_installed = function()
     end
 end
 
-
 mason_lspconfig.setup_handlers {
     function(server_name)
         local config_handlers = {
@@ -203,10 +209,9 @@ mason_lspconfig.setup_handlers {
 local on_attach_rust = function(_, bufnr)
     on_attach(_, bufnr)
     -- Hover actions
-    nmap("<leader-ha>", require('rust-tools').hover_actions.hover_actions, "Rust hover action" )
+    nmap("<leader-ha>", require('rust-tools').hover_actions.hover_actions, "Rust hover action")
     -- Code action groups
     nmap("<leader>ca", require("rust-tools").code_action_group.code_action_group, "Rust [C]ode [A]ction")
-
 end
 
 local extension_path
@@ -215,33 +220,42 @@ local liblldb_path
 
 if (require("bahugo_conf.utils").is_windows()) then
     extension_path = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", "mason", "packages", "codelldb", "extension")
-    codelldb_path = path:new(extension_path,'adapter', 'codelldb.exe') -- pour linux sans extension
-    liblldb_path = path:new(extension_path, 'lldb', 'lib', 'liblldb.lib')  -- pour linux .so
+    codelldb_path = path:new(extension_path, 'adapter', 'codelldb.exe')   -- pour linux sans extension
+    liblldb_path = path:new(extension_path, 'lldb', 'lib', 'liblldb.lib') -- pour linux .so
 else
-    extension_path = path:new(os.getenv("HOME"), ".local", "share", "nvim","mason", "packages", "codelldb", "extension")
-    codelldb_path = path:new(extension_path,'adapter', 'codelldb') -- pour linux sans extension
-    liblldb_path = path:new(extension_path, 'lldb', 'lib', 'liblldb.so')  -- pour linux .so
+    extension_path = path:new(os.getenv("HOME"), ".local", "share", "nvim", "mason", "packages", "codelldb", "extension")
+    codelldb_path = path:new(extension_path, 'adapter', 'codelldb')      -- pour linux sans extension
+    liblldb_path = path:new(extension_path, 'lldb', 'lib', 'liblldb.so') -- pour linux .so
 end
 
 local opts_rt = {
-    tools = { -- rust-tools options
+    tools = {
+              -- rust-tools options
 
-    -- how to execute terminal commands
-    -- options right now: termopen / quickfix
-    executor = require("rust-tools.executors").quickfix
-},
-server = {
-    on_attach = on_attach_rust
-},
--- ... other configs
-dap = {
-    adapter = require('rust-tools.dap').get_codelldb_adapter(
-    codelldb_path.filename,
-    liblldb_path.filename)
-}
+        -- how to execute terminal commands
+        -- options right now: termopen / quickfix
+        executor = require("rust-tools.executors").quickfix
+    },
+    server = {
+        on_attach = on_attach_rust
+    },
+    -- ... other configs
+    dap = {
+        adapter = require('rust-tools.dap').get_codelldb_adapter(
+            codelldb_path.filename,
+            liblldb_path.filename)
+    }
 }
 
 require("rust-tools").setup(opts_rt)
+
+-- lsp for qt qml using python pyside6
+require("lspconfig").qmlls.setup{
+            cmd = { "pyside6-qmlls" },
+            filetypes = { "qmljs" },
+            capabilities = capabilities,
+            on_attach = on_attach
+        }
 
 -- Turn on lsp status information
 require("fidget").setup {
@@ -309,7 +323,7 @@ vim.diagnostic.config({
         focusable = false,
     },
     update_in_insert = false, -- default to false
-    severity_sort = false, -- default to false
+    severity_sort = false,    -- default to false
 })
 
 local sign = function(opts)
@@ -324,4 +338,3 @@ sign({ name = 'DiagnosticSignError', text = '✘' })
 sign({ name = 'DiagnosticSignWarn', text = '▲' })
 sign({ name = 'DiagnosticSignHint', text = '⚑' })
 sign({ name = 'DiagnosticSignInfo', text = '' })
-
