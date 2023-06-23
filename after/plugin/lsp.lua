@@ -85,18 +85,30 @@ local servers = {
     -- gopls = {},
     rust_analyzer = {},
     -- tsserver = {},
+    ruff_lsp = {
+        -- python linter
+        ruff_lsp = {},
+    },
+    -- pylyzer = {
+    --     -- python static analazer
+    --     pylyzer = {
+    --         settings={
+    --             python = {
+    --                 checkOnType = false,
+    --                 diagnostics = false,
+    --                 inlayHints = true,
+    --                 smartCompletion = true
+    --             }
+    --         }
+    --     },
+    -- },
     -- for numpy completion please install numpydoc
     pylsp = {
         pylsp = {
             plugins = {
                 -- pour ruff voir doc https://github.com/python-lsp/python-lsp-ruff
                 ruff = {
-                    enabled = true,
-                    lineLength = 100,
-                    ignore = {
-                        -- E402 module level import not at top of file
-                        "E402",
-                    },
+                    enabled = false,
                 },
                 pyflakes = {
                     enabled = false,
@@ -125,7 +137,7 @@ local servers = {
                     convention = "google",
                 },
                 rope_autoimport = {
-                    enabled = false,
+                    enabled = true,
                 },
                 rope_completion = {
                     enabled = false,
@@ -138,7 +150,19 @@ local servers = {
     omnisharp = {},
     lua_ls = {
         Lua = {
-            workspace = { checkThirdParty = false },
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                version = 'LuaJIT',
+            },
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = vim.api.nvim_get_runtime_file("", true),
+            },
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = {
+                enable = false,
+            },
+            -- workspace = { checkThirdParty = false },
             telemetry = { enable = false },
             diagnostics = {
                 globals = { 'vim' }
@@ -172,19 +196,19 @@ mason_lspconfig.setup {
 }
 
 local warn_if_pylsp_plugins_are_not_installed = function()
-    local ruff_exe
+    local mypy_exe
     local python_lsp_venv = path:new("mason", "packages", "python-lsp-server", "venv")
     if (require("bahugo_conf.utils").is_windows()) then
-        ruff_exe = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "Scripts", "ruff.exe")
+        mypy_exe = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "Scripts", "mypy.exe")
     else
-        ruff_exe = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_venv, "bin", "ruff")
+        mypy_exe = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_venv, "bin", "mypy")
     end
-    if not path.exists(ruff_exe) then
-        vim.notify(tostring(ruff_exe), vim.log.levels.WARN, {})
+    if not path.exists(mypy_exe) then
+        vim.notify(tostring(mypy_exe), vim.log.levels.WARN, {})
         vim.notify(
             'Pour bénéficier des linters python, il faut installer manuellement les plugins pylsp \n' ..
             'supplémentaires en tapant la commande suivante: \n' ..
-            ':PylspInstall python-lsp-ruff pylsp-rope pylsp-mypy',
+            ':PylspInstall pylsp-rope pylsp-mypy',
 
             vim.log.levels.WARN, {})
     end

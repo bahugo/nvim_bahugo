@@ -105,7 +105,7 @@ return {
             { 'L3MON4D3/LuaSnip' },
             { 'rafamadriz/friendly-snippets' },
             -- Useful status Update for LSP
-            { 'j-hui/fidget.nvim' },
+            { 'j-hui/fidget.nvim', tag="legacy" },
             -- Additional lua configuration for nvim
             { 'folke/neodev.nvim' }
         }
