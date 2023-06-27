@@ -153,13 +153,5 @@ return {
     ("folke/zen-mode.nvim"),
     {
         "m4xshen/hardtime.nvim",
-        event = "VeryLazy",
-        opts = {
-            disable_mouse=false,
-            max_time=1000,
-            max_count =5,
-            hint=true,
-            notification=true,
-    }
     },
 }
