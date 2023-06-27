@@ -90,17 +90,13 @@ local servers = {
         ruff_lsp = {},
     },
     -- pylyzer = {
-    --     -- python static analazer
-    --     pylyzer = {
-    --         settings={
-    --             python = {
-    --                 checkOnType = false,
-    --                 diagnostics = false,
-    --                 inlayHints = true,
-    --                 smartCompletion = true
-    --             }
-    --         }
-    --     },
+    --     -- python static analyzer
+    --     python = {
+    --         checkOnType = false,
+    --         diagnostics = false,
+    --         inlayHints = false,
+    --         smartCompletion = false
+    --     }
     -- },
     -- for numpy completion please install numpydoc
     pylsp = {
