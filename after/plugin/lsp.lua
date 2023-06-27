@@ -216,6 +216,10 @@ mason_lspconfig.setup_handlers {
             on_attach = on_attach,
             settings = servers[server_name],
         }
+        if server_name == "pylyzer" then
+            -- temporary disable pylyzer
+            return
+        end
         if server_name == "pylsp" then
             warn_if_pylsp_plugins_are_not_installed()
         end
