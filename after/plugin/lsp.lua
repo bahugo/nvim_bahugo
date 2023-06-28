@@ -89,15 +89,15 @@ local servers = {
         -- python linter
         ruff_lsp = {},
     },
-    -- pylyzer = {
-    --     -- python static analyzer
-    --     python = {
-    --         checkOnType = false,
-    --         diagnostics = false,
-    --         inlayHints = false,
-    --         smartCompletion = false
-    --     }
-    -- },
+    pylyzer = {
+        -- python static analyzer
+        python = {
+            checkOnType = false,
+            diagnostics = false,
+            inlayHints = false,
+            smartCompletion = false
+        }
+    },
     -- for numpy completion please install numpydoc
     pylsp = {
         pylsp = {
@@ -209,6 +209,7 @@ local warn_if_pylsp_plugins_are_not_installed = function()
     end
 end
 
+lspconfig = require("lspconfig")
 mason_lspconfig.setup_handlers {
     function(server_name)
         local config_handlers = {
@@ -216,17 +217,30 @@ mason_lspconfig.setup_handlers {
             on_attach = on_attach,
             settings = servers[server_name],
         }
-        if server_name == "pylyzer" then
-            -- temporary disable pylyzer
-            return
-        end
         if server_name == "pylsp" then
             warn_if_pylsp_plugins_are_not_installed()
         end
         -- print("lspconfig setup " .. server_name)
         -- print(vim.inspect(servers[server_name]))
-        require('lspconfig')[server_name].setup(config_handlers)
+        lspconfig[server_name].setup(config_handlers)
     end,
+    ["pylyzer"] = function()
+            -- temporary disable pylyzer
+        -- lspconfig.pylyzer.setup{
+            -- capabilities = capabilities,
+            -- on_attach = on_attach,
+            -- settings = servers.pylyzer,
+        -- }
+    end,
+
+}
+
+-- lsp for qt qml using python pyside6
+lspconfig.qmlls.setup{
+    cmd = { "pyside6-qmlls" },
+    filetypes = { "qmljs" },
+    capabilities = capabilities,
+    on_attach = on_attach
 }
 
 local on_attach_rust = function(_, bufnr)
@@ -271,14 +285,6 @@ local opts_rt = {
 }
 
 require("rust-tools").setup(opts_rt)
-
--- lsp for qt qml using python pyside6
-require("lspconfig").qmlls.setup{
-            cmd = { "pyside6-qmlls" },
-            filetypes = { "qmljs" },
-            capabilities = capabilities,
-            on_attach = on_attach
-        }
 
 -- Turn on lsp status information
 require("fidget").setup {
