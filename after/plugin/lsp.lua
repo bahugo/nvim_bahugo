@@ -74,6 +74,8 @@ local on_attach = function(_, bufnr)
         { desc = 'Format current buffer with LSP' })
 end
 
+require("neodev").setup()
+
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --
@@ -143,7 +145,6 @@ local servers = {
         }
     },
     marksman = {},
-    omnisharp = {},
     lua_ls = {
         Lua = {
             runtime = {
@@ -151,8 +152,14 @@ local servers = {
                 version = 'LuaJIT',
             },
             workspace = {
+                checkThirdParty = false,
                 -- Make the server aware of Neovim runtime files
-                library = vim.api.nvim_get_runtime_file("", true),
+                library = {
+                    vim.env.VIMRUNTIME,
+                    require("neodev.config").types(),
+                    "${3rd}/busted/library",
+                    "${3rd}/luassert/library",
+            },
             },
             -- Do not send telemetry data containing a randomized but unique identifier
             telemetry = {
@@ -171,8 +178,6 @@ local servers = {
     -- -- DAP servers
     -- debugpy = {},
 }
-
-require("neodev").setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()

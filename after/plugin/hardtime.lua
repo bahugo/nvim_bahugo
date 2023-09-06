@@ -5,5 +5,10 @@ require("hardtime").setup(
             max_count =5,
             hint=true,
             notification=true,
-            disabled_keys ={},
+            disabled_keys ={
+                ["<Up>"] = {},
+                ["<Down>"] = {},
+                ["<Left>"] = {},
+                ["<Right>"] = {},
+            },
     })
