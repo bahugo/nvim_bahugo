@@ -149,7 +149,7 @@ return {
     },
     -- zen mode
     ("folke/zen-mode.nvim"),
-    {
-        "m4xshen/hardtime.nvim",
-    },
+    -- {
+    --     "m4xshen/hardtime.nvim",
+    -- },
 }
