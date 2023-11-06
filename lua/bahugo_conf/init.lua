@@ -47,5 +47,5 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("bahugo_conf.lazy_plugins")
+require("lazy").setup("bahugo_conf.plugins")
 

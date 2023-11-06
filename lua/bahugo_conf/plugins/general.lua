@@ -1,11 +1,6 @@
 return {
 
     {
-        'nvim-telescope/telescope.nvim',
-        branch = '0.1.x',
-        dependencies = { { 'nvim-lua/plenary.nvim' } }
-    },
-    {
         "AckslD/nvim-neoclip.lua",
         'nvim-telescope/telescope-ui-select.nvim',
         dependencies = {
@@ -14,6 +9,7 @@ return {
         config = function()
             require('neoclip').setup()
         end,
+        lazy=true
     },
     {
         "catppuccin/nvim",
@@ -75,7 +71,6 @@ return {
     -- git
     { 'lewis6991/gitsigns.nvim' },
     ('tpope/vim-fugitive'),
-    'numToStr/Comment.nvim', -- "gc" to comment visual regions/lines
     'nvim-lualine/lualine.nvim',
     -- ampoule avec action disponibles
     {
@@ -83,31 +78,6 @@ return {
         dependencies = "antoinemadec/FixCursorHold.nvim"
     },
 
-    'nvim-tree/nvim-tree.lua',
-    {
-        'neovim/nvim-lspconfig',
-        dependencies = {
-            -- LSP Support
-            { 'williamboman/mason.nvim' },
-            { 'williamboman/mason-lspconfig.nvim' },
-
-            -- Autocompletion
-            { 'hrsh7th/nvim-cmp' },
-            { 'hrsh7th/cmp-buffer' },
-            { 'hrsh7th/cmp-path' },
-            { 'saadparwaiz1/cmp_luasnip' },
-            { 'hrsh7th/cmp-nvim-lsp' },
-            { 'hrsh7th/cmp-nvim-lua' },
-
-            -- Snippets
-            { 'L3MON4D3/LuaSnip' },
-            { 'rafamadriz/friendly-snippets' },
-            -- Useful status Update for LSP
-            { 'j-hui/fidget.nvim', tag="legacy" },
-            -- Additional lua configuration for nvim
-            { 'folke/neodev.nvim' }
-        }
-    },
     {
         "ThePrimeagen/refactoring.nvim",
         dependencies = {
@@ -146,6 +116,7 @@ return {
             "nvim-telescope/telescope-dap.nvim",
             "jbyuki/one-small-step-for-vimkind",
         },
+        lazy=true
     },
     -- zen mode
     ("folke/zen-mode.nvim"),
