@@ -1,16 +1,90 @@
 return {
     -- Debugging
-        "mfussenegger/nvim-dap",
-        -- wants = { "nvim-dap-virtual-text", "nvim-dap-ui", "nvim-dap-python",
-        --     "which-key.nvim" },
-        dependencies = {
-            "williamboman/mason.nvim",
-            "theHamsta/nvim-dap-virtual-text",
-            "rcarriga/nvim-dap-ui",
-            "mfussenegger/nvim-dap-python",
-            "nvim-telescope/telescope-dap.nvim",
-            "jbyuki/one-small-step-for-vimkind",
+    "mfussenegger/nvim-dap",
+    -- wants = { "nvim-dap-virtual-text", "nvim-dap-ui", "nvim-dap-python",
+    --     "which-key.nvim" },
+    dependencies = {
+        "williamboman/mason.nvim",
+        "theHamsta/nvim-dap-virtual-text",
+        "rcarriga/nvim-dap-ui",
+        "mfussenegger/nvim-dap-python",
+        "nvim-telescope/telescope-dap.nvim",
+        "jbyuki/one-small-step-for-vimkind",
+    },
+    lazy=true,
+    keys = {
+
+        { mode='n', '<F5>',  function() require('dap').continue() end,  desc = "DAP continue" },
+        { mode='n', '<F10>', function() require('dap').step_over() end, desc = "DAP step over" },
+        { mode='n', '<F11>', function() require('dap').step_into() end, desc = "DAP step into" },
+        { mode='n', '<F12>', function() require('dap').step_out() end,  desc = "DAP step out" },
+        {
+            mode='n',
+            '<Leader>b',
+            function() require('dap').toggle_breakpoint() end,
+            desc = "DAP toggle breakpoint"
         },
+        {
+            mode='n',
+            '<Leader>B',
+            function() require('dap').set_breakpoint() end,
+            desc = "DAP set breakpoint"
+        },
+        {
+            mode='n',
+            '<Leader>lp',
+            function()
+                require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
+            end,
+            desc = "DAP set breakpoint with message"
+        },
+        {
+            mode='n',
+            '<Leader>dr',
+            function() require('dap').repl.open() end,
+            desc = "DAP repl open"
+        },
+        {
+            mode='n',
+            '<Leader>dl',
+            function() require('dap').run_last() end,
+            desc = "DAP run last"
+        },
+        {
+            mode={ 'n', 'v' },
+            '<Leader>dh',
+            function()
+                require('dap.ui.widgets').hover()
+            end,
+            desc = "DAP hover"
+        },
+        {
+            mode={ 'n', 'v' },
+            '<Leader>dp',
+            function()
+                require('dap.ui.widgets').preview()
+            end,
+            desc = "DAP preview"
+        },
+        {
+            mode='n',
+            '<Leader>df',
+            function()
+                local widgets = require('dap.ui.widgets')
+                widgets.centered_float(widgets.frames)
+            end,
+            desc = "DAP frames"
+        },
+        {
+            mode='n',
+            '<Leader>ds',
+            function()
+                local widgets = require('dap.ui.widgets')
+                widgets.centered_float(widgets.scopes)
+            end,
+            desc = "DAP scopes"
+        },
+    },
     config = function()
         local path = require("plenary.path")
 
@@ -50,37 +124,6 @@ return {
         local dap = require('dap')
 
         -- set des keymap
-        vim.keymap.set('n', '<F5>', function() require('dap').continue() end, { desc = "DAP continue" })
-        vim.keymap.set('n', '<F10>', function() require('dap').step_over() end, { desc = "DAP step over" })
-        vim.keymap.set('n', '<F11>', function() require('dap').step_into() end, { desc = "DAP step into" })
-        vim.keymap.set('n', '<F12>', function() require('dap').step_out() end, { desc = "DAP step out" })
-        vim.keymap.set('n', '<Leader>b', function() require('dap').toggle_breakpoint() end,
-            { desc = "DAP toggle breakpoint" })
-        vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end,
-            { desc = "DAP set breakpoint" })
-        vim.keymap.set('n', '<Leader>lp',
-            function()
-                require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
-            end,
-            { desc = "DAP set breakpoint with message" })
-        vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end,
-            { desc = "DAP repl open" })
-        vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end,
-            { desc = "DAP run last" })
-        vim.keymap.set({ 'n', 'v' }, '<Leader>dh', function()
-            require('dap.ui.widgets').hover()
-        end, { desc = "DAP hover" })
-        vim.keymap.set({ 'n', 'v' }, '<Leader>dp', function()
-            require('dap.ui.widgets').preview()
-        end, { desc = "DAP preview" })
-        vim.keymap.set('n', '<Leader>df', function()
-            local widgets = require('dap.ui.widgets')
-            widgets.centered_float(widgets.frames)
-        end, { desc = "DAP frames" })
-        vim.keymap.set('n', '<Leader>ds', function()
-            local widgets = require('dap.ui.widgets')
-            widgets.centered_float(widgets.scopes)
-        end, { desc = "DAP scopes" })
 
         local dap_py = require("dap-python")
         dap_py.setup(get_debubpy_python())

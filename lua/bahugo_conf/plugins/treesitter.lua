@@ -12,6 +12,7 @@ return {
         -- after = 'nvim-treesitter',
     },
     { 'nvim-treesitter/playground' },
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
         require 'nvim-treesitter.configs'.setup {
 

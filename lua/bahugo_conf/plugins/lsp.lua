@@ -1,30 +1,30 @@
 return {
 
-        'neovim/nvim-lspconfig',
-        dependencies = {
-            -- LSP Support
-            { 'williamboman/mason.nvim' },
-            { 'williamboman/mason-lspconfig.nvim' },
+    'neovim/nvim-lspconfig',
+    dependencies = {
+        -- LSP Support
+        { 'williamboman/mason.nvim' },
+        { 'williamboman/mason-lspconfig.nvim' },
 
-            -- Autocompletion
-            { 'hrsh7th/nvim-cmp' },
-            { 'hrsh7th/cmp-buffer' },
-            { 'hrsh7th/cmp-path' },
-            { 'saadparwaiz1/cmp_luasnip' },
-            { 'hrsh7th/cmp-nvim-lsp' },
-            { 'hrsh7th/cmp-nvim-lua' },
+        -- Autocompletion
+        { 'hrsh7th/nvim-cmp' },
+        { 'hrsh7th/cmp-buffer' },
+        { 'hrsh7th/cmp-path' },
+        { 'saadparwaiz1/cmp_luasnip' },
+        { 'hrsh7th/cmp-nvim-lsp' },
+        { 'hrsh7th/cmp-nvim-lua' },
 
-            -- Snippets
-            { 'L3MON4D3/LuaSnip' },
-            { 'rafamadriz/friendly-snippets' },
-            -- Useful status Update for LSP
-            { 'j-hui/fidget.nvim', tag="legacy" },
-            -- Additional lua configuration for nvim
-            { 'folke/neodev.nvim' },
-            "simrat39/rust-tools.nvim",
-            'neovim/nvim-lspconfig',
-            "mfussenegger/nvim-dap",
-        },
+        -- Snippets
+        { 'L3MON4D3/LuaSnip' },
+        { 'rafamadriz/friendly-snippets' },
+        -- Useful status Update for LSP
+        { 'j-hui/fidget.nvim',                tag = "legacy" },
+        -- Additional lua configuration for nvim
+        { 'folke/neodev.nvim' },
+        "simrat39/rust-tools.nvim",
+        -- "mfussenegger/nvim-dap",
+    },
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
         local path = require("plenary.path")
 
@@ -291,12 +291,12 @@ return {
         if (require("bahugo_conf.utils").is_windows()) then
             extension_path = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", "mason", "packages", "codelldb",
                 "extension")
-            codelldb_path = path:new(extension_path, 'adapter', 'codelldb.exe') -- pour linux sans extension
+            codelldb_path = path:new(extension_path, 'adapter', 'codelldb.exe')   -- pour linux sans extension
             liblldb_path = path:new(extension_path, 'lldb', 'lib', 'liblldb.lib') -- pour linux .so
         else
             extension_path = path:new(os.getenv("HOME"), ".local", "share", "nvim", "mason", "packages", "codelldb",
                 "extension")
-            codelldb_path = path:new(extension_path, 'adapter', 'codelldb') -- pour linux sans extension
+            codelldb_path = path:new(extension_path, 'adapter', 'codelldb')      -- pour linux sans extension
             liblldb_path = path:new(extension_path, 'lldb', 'lib', 'liblldb.so') -- pour linux .so
         end
 
@@ -400,7 +400,7 @@ return {
                 focusable = false,
             },
             update_in_insert = false, -- default to false
-            severity_sort = false, -- default to false
+            severity_sort = false,    -- default to false
         })
 
         local sign = function(opts)

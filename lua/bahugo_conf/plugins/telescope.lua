@@ -3,7 +3,18 @@ return {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
     dependencies = { { 'nvim-lua/plenary.nvim' } },
-    lazy=true,
+    keys={
+
+        {mode= 'n', '<C-p>',      function() require('telescope.builtin').git_files() end,  desc = "Telescope git_files" },
+        {mode= 'n', '<leader>sf', function() require('telescope.builtin').find_files() end,  desc = '[S]earch [F]iles' },
+        {mode= 'n', '<leader>sh', function() require('telescope.builtin').help_tags() end,  desc = '[S]earch [H]elp' },
+        {mode= 'n', '<leader>sw', function() require('telescope.builtin').grep_string() end,  desc = '[S]earch current [W]ord' },
+        {mode= 'n', '<leader>sg', function() require('telescope.builtin').live_grep() end,  desc = '[S]earch by [G]rep' },
+        {mode= 'n', '<leader>sd', function() require('telescope.builtin').diagnostics() end,  desc = '[S]earch [D]iagnostics' },
+        {mode= 'n', '<leader>sc', function() require('telescope').extensions.neoclip.default() end,  desc = '[S]earch [C]lipboard' },
+        {mode= 'n', '<leader>dc', function() require('telescope').extensions.dap.commands() end,  desc = '[D]ap [C]ommands' },
+        {mode= 'n', '<leader>dg', function() require('telescope').extensions.dap.configurations() end,  desc = '[D]ap confi[G]urations' },
+    },
     config = function()
         -- This is your opts table
         require("telescope").setup {
@@ -21,17 +32,5 @@ return {
         -- load_extension, somewhere after setup function:
         require("telescope").load_extension("ui-select")
         require('telescope').load_extension('dap')
-        local builtin = require('telescope.builtin')
-        vim.keymap.set('n', '<C-p>', builtin.git_files, { desc = "Telescope git_files" })
-        vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-        vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-        vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-        vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-        vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-        vim.keymap.set('n', '<leader>sc', require('telescope').extensions.neoclip.default,
-            { desc = '[S]earch [C]lipboard' })
-        vim.keymap.set('n', '<leader>dc', require('telescope').extensions.dap.commands, { desc = '[D]ap [C]ommands' })
-        vim.keymap.set('n', '<leader>dg', require('telescope').extensions.dap.configurations,
-            { desc = '[D]ap confi[G]urations' })
     end
 }
