@@ -2,9 +2,6 @@ return {
     {
         -- Highlight, edit, and navigate code
         'nvim-treesitter/nvim-treesitter',
-        run = function()
-            pcall(require('nvim-treesitter.install').update { with_sync = true })
-        end,
     },
     {
         -- Additional text objects via treesitter
@@ -14,6 +11,7 @@ return {
     { 'nvim-treesitter/playground' },
     event = { "BufReadPre", "BufNewFile" },
     config = function()
+        pcall(require('nvim-treesitter.install').update { with_sync = true })
         require 'nvim-treesitter.configs'.setup {
 
             -- A list of parser names, or "all"
