@@ -9,22 +9,7 @@ return {
         config = function()
             require('neoclip').setup()
         end,
-        lazy=true
     },
-    {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        config = function()
-            vim.cmd('colorscheme catppuccin')
-        end
-    },
-    ({
-        'rose-pine/neovim',
-        name = 'rose-pine',
-        -- config = function()
-        --     vim.cmd('colorscheme rose-pine')
-        -- end
-    }),
     {
         "folke/which-key.nvim",
         config = function()
@@ -36,42 +21,11 @@ return {
         end
     },
     {
-        "folke/trouble.nvim",
-        dependencies = "nvim-tree/nvim-web-devicons",
+        'mbbill/undotree',
         config = function()
-            require("trouble").setup {
-                -- your configuration comes here
-                -- or leave it empty to use the default settings
-                -- refer to the configuration section below
-            }
+            vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
         end
     },
-    {
-        -- Highlight, edit, and navigate code
-        'nvim-treesitter/nvim-treesitter',
-        run = function()
-            pcall(require('nvim-treesitter.install').update { with_sync = true })
-        end,
-    },
-    {
-        -- Additional text objects via treesitter
-        'nvim-treesitter/nvim-treesitter-textobjects',
-        -- after = 'nvim-treesitter',
-    },
-    ('nvim-treesitter/playground'),
-    ('theprimeagen/harpoon'),
-    ('mbbill/undotree'),
-    {
-        "akinsho/toggleterm.nvim",
-        version = '*',
-        config = function()
-            require("toggleterm").setup()
-        end
-    },
-    -- git
-    { 'lewis6991/gitsigns.nvim' },
-    ('tpope/vim-fugitive'),
-    'nvim-lualine/lualine.nvim',
     -- ampoule avec action disponibles
     {
         "kosayoda/nvim-lightbulb",
@@ -79,48 +33,19 @@ return {
     },
 
     {
-        "ThePrimeagen/refactoring.nvim",
-        dependencies = {
-            { "nvim-lua/plenary.nvim" },
-            { "nvim-treesitter/nvim-treesitter" }
-        }
-    },
-    {
-        "simrat39/rust-tools.nvim",
-        dependencies = {
-            'neovim/nvim-lspconfig',
-            "mfussenegger/nvim-dap",
-        }
-    },
-    {
         -- plugin pour la gestion des dépendances rust
         'saecki/crates.nvim',
         -- lazyloading
         event = { "BufRead Cargo.toml" },
-        config= function ()
+        config = function()
             require("crates").setup()
         end,
     },
     -- fenetre d'affichage de la structure des fonctions et classes du fichier ouvert
-    "liuchengxu/vista.vim",
-    -- Debugging
     {
-        "mfussenegger/nvim-dap",
-        -- wants = { "nvim-dap-virtual-text", "nvim-dap-ui", "nvim-dap-python",
-        --     "which-key.nvim" },
-        dependencies = {
-            "williamboman/mason.nvim",
-            "theHamsta/nvim-dap-virtual-text",
-            "rcarriga/nvim-dap-ui",
-            "mfussenegger/nvim-dap-python",
-            "nvim-telescope/telescope-dap.nvim",
-            "jbyuki/one-small-step-for-vimkind",
-        },
-        lazy=true
+        "liuchengxu/vista.vim",
+        config = function()
+            vim.g.vista_default_executive = 'nvim_lsp'
+        end
     },
-    -- zen mode
-    ("folke/zen-mode.nvim"),
-    -- {
-    --     "m4xshen/hardtime.nvim",
-    -- },
 }

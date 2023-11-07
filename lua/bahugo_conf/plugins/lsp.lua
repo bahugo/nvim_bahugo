@@ -20,7 +20,10 @@ return {
             -- Useful status Update for LSP
             { 'j-hui/fidget.nvim', tag="legacy" },
             -- Additional lua configuration for nvim
-            { 'folke/neodev.nvim' }
+            { 'folke/neodev.nvim' },
+            "simrat39/rust-tools.nvim",
+            'neovim/nvim-lspconfig',
+            "mfussenegger/nvim-dap",
         },
     config = function()
         local path = require("plenary.path")
