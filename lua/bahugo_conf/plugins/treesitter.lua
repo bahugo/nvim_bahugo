@@ -18,7 +18,7 @@ return {
             ensure_installed = { "qmldir", "qmljs", "cpp", "c_sharp", "python", "c",
                 "lua", "luadoc", "rust", "sql", "yaml", "csv", "xml", "bash", "fortran", "cmake", "json",
                 "rst", "toml", "html", "markdown", "markdown_inline", "comment", "git_config", "gitcommit",
-                "gitignore", "regex", "latex", "fish", "doxygen", "dockerfile", "diff"
+                "gitignore", "regex", "latex", "fish", "doxygen", "dockerfile", "diff", "kdl"
             },
 
             -- Install parsers synchronously (only applied to `ensure_installed`)
