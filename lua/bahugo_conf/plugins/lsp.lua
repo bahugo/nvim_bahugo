@@ -26,8 +26,8 @@ return {
     },
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-        local path = require("plenary.path")
 
+        local path = require("plenary.path")
         local generic_map = function(keys, func, desc, mode)
             if desc then
                 desc = 'LSP: ' .. desc
@@ -41,22 +41,6 @@ return {
         local nmap = function(keys, func, desc)
             generic_map(keys, func, desc, "n")
         end
-
-        -- set custom filetypes using autocmd (will be executed when events will be triggered
-        vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
-            pattern = { "*.comm", "*.mess" },
-            callback = function()
-                vim.cmd("setfiletype python")
-            end
-        }
-        )
-        vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
-            pattern = { "*.qml" },
-            callback = function()
-                vim.cmd("setfiletype qml")
-            end
-        }
-        )
 
         -- LSP settings.
         --  This function gets run when an LSP connects to a particular buffer.

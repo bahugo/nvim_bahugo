@@ -1,3 +1,4 @@
+require("bahugo_conf.filetype")
 require("bahugo_conf.set")
 require("bahugo_conf.remap")
 
