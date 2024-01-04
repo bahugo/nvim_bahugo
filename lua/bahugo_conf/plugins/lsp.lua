@@ -147,7 +147,7 @@ return {
                             convention = "google",
                         },
                         rope_autoimport = {
-                            enabled = true,
+                            enabled = false,
                         },
                         rope_completion = {
                             enabled = false,
