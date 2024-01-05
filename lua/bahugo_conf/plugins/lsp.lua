@@ -26,7 +26,6 @@ return {
     },
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-
         local path = require("plenary.path")
         local generic_map = function(keys, func, desc, mode)
             if desc then
@@ -87,6 +86,8 @@ return {
         end
 
         require("neodev").setup()
+
+        local lspconfig = require("lspconfig")
 
         -- Enable the following language servers
         --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -183,6 +184,14 @@ return {
                     }
                 },
             },
+            omnisharp = {
+                omnisharp = {
+                    enable_roslyn_analyzers = true,
+                    filetypes = { "cs", "vb" },
+                    root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj", "omnisharp.json",
+                            "function.json" )
+                },
+            },
             -- -- Linter servers
             -- sqlfluff = {},
             -- markdownlint = {},
@@ -226,7 +235,6 @@ return {
             end
         end
 
-        lspconfig = require("lspconfig")
         mason_lspconfig.setup_handlers {
             function(server_name)
                 local config_handlers = {
