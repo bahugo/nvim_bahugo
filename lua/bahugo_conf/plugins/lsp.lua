@@ -22,7 +22,7 @@ return {
         -- Additional lua configuration for nvim
         { 'folke/neodev.nvim' },
         "simrat39/rust-tools.nvim",
-        -- "mfussenegger/nvim-dap",
+        { "Hoffs/omnisharp-extended-lsp.nvim", lazy = true },
     },
     event = { "BufReadPre", "BufNewFile" },
     config = function()
@@ -98,7 +98,6 @@ return {
             -- LSP servers
             -- clangd = {},
             -- gopls = {},
-            rust_analyzer = {},
             -- tsserver = {},
             ruff_lsp = {
                 -- python linter
@@ -157,7 +156,6 @@ return {
                     }
                 }
             },
-            marksman = {},
             lua_ls = {
                 Lua = {
                     runtime = {
@@ -184,20 +182,10 @@ return {
                     }
                 },
             },
-            omnisharp = {
-                omnisharp = {
-                    enable_roslyn_analyzers = true,
-                    filetypes = { "cs", "vb" },
-                    root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj", "omnisharp.json",
-                            "function.json" )
-                },
-            },
             -- -- Linter servers
             -- sqlfluff = {},
             -- markdownlint = {},
             -- yamllint = {},
-            -- -- DAP servers
-            -- debugpy = {},
         }
 
         -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
@@ -210,9 +198,13 @@ return {
         -- Ensure the servers above are installed
         local mason_lspconfig = require 'mason-lspconfig'
 
+        local mason_auto_installed = vim.tbl_keys(servers)
+        table.insert(mason_auto_installed, "omnisharp")
+        table.insert(mason_auto_installed, "marksman")
+        table.insert(mason_auto_installed, "rust_analyzer")
 
         mason_lspconfig.setup {
-            ensure_installed = vim.tbl_keys(servers),
+            ensure_installed = mason_auto_installed,
             automatic_installation = true
         }
 
@@ -257,9 +249,19 @@ return {
                 -- settings = servers.pylyzer,
                 -- }
             end,
-
+            ["omnisharp"] = function()
+                lspconfig.omnisharp.setup({
+                    handlers = {
+                        ["textDocument/definition"] = function(...)
+                            return require("omnisharp_extended").handler(...)
+                        end,
+                    },
+                    enable_roslyn_analyzers = true,
+                    organize_imports_on_format = true,
+                    enable_import_completion = true,
+                })
+            end,
         }
-
         -- lsp for qt qml using python pyside6
         lspconfig.qmlls.setup {
             cmd = { "pyside6-qmlls" },
