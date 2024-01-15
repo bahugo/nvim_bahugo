@@ -1,17 +1,19 @@
-vim.api.nvim_set_keymap(
--- remap to open the Telescope refactoring menu in visual mode
-    "v",
+vim.keymap.set(
+    { "n", "x" },
     "<leader>rr",
-    "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
-    { noremap = true }
+    function() require('telescope').extensions.refactoring.refactors() end,
+    {
+        desc = "Telescope Refactoring",
+        noremap = true
+    }
 )
-
 return {
 
     "ThePrimeagen/refactoring.nvim",
     dependencies = {
         { "nvim-lua/plenary.nvim" },
-        { "nvim-treesitter/nvim-treesitter" }
+        { "nvim-treesitter/nvim-treesitter" },
+        { 'nvim-telescope/telescope.nvim' },
     },
     lazy = true,
     config = function()
