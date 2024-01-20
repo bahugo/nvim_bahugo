@@ -182,6 +182,9 @@ return {
                     }
                 },
             },
+            astro = {
+                astro = {},
+            },
             -- -- Linter servers
             -- sqlfluff = {},
             -- markdownlint = {},
