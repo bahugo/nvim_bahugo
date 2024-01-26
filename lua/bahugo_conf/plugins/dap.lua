@@ -14,10 +14,10 @@ return {
     lazy=true,
     keys = {
 
-        { mode='n', '<F5>',  function() require('dap').continue() end,  desc = "DAP continue" },
-        { mode='n', '<F10>', function() require('dap').step_over() end, desc = "DAP step over" },
-        { mode='n', '<F11>', function() require('dap').step_into() end, desc = "DAP step into" },
-        { mode='n', '<F12>', function() require('dap').step_out() end,  desc = "DAP step out" },
+        { mode={ 'n', 'v' }, '<F5>',  function() require('dap').continue() end,  desc = "DAP continue" },
+        { mode={ 'n', 'v' }, '<F10>', function() require('dap').step_over() end, desc = "DAP step over" },
+        { mode={ 'n', 'v' }, '<F11>', function() require('dap').step_into() end, desc = "DAP step into" },
+        { mode={ 'n', 'v' }, '<F12>', function() require('dap').step_out() end,  desc = "DAP step out" },
         {
             mode='n',
             '<Leader>b',
@@ -129,6 +129,16 @@ return {
         dap_py.setup(get_debubpy_python())
         dap_py.resolve_python = resolve_python
         dap_py.test_runner = "pytest"
+        -- Modifiying config order
+        local dap_py_configs = dap.configurations.python
+        local configs = {}
+        table.insert(configs, dap_py_configs[3])
+        table.insert(configs, dap_py_configs[1])
+        table.insert(configs, dap_py_configs[2])
+        table.insert(configs, dap_py_configs[4])
+
+        dap.configurations.python = configs
+
         -- dap.adapters.codelldb = {
         --   type = 'server',
         --   port = "${port}",
