@@ -87,7 +87,6 @@ return {
             if client.server_capabilities.inlayHintProvider then
                 vim.lsp.buf.inlay_hint(bufnr, true)
             end
-
         end
 
         require("neodev").setup()
@@ -248,7 +247,6 @@ return {
                 -- print("lspconfig setup " .. server_name)
                 -- print(vim.inspect(servers[server_name]))
                 lspconfig[server_name].setup(config_handlers)
-
             end,
             ["pylyzer"] = function()
                 -- temporary disable pylyzer
@@ -346,6 +344,16 @@ return {
                 luasnip.change_choice(1)
             end
         end, { silent = true })
+        luasnip.add_snippets("python", {
+            luasnip.snippet("debug", {
+                luasnip.text_node({ "import debugpy", "debug_port = 5678",
+                    "debugpy.configure(qt=\"auto\", )", "debugpy.listen(debug_port)",
+                    "debugpy.wait_for_client()"}),
+            }),
+        }, {
+            key = "debug",
+        })
+
         -- use vscode snippets
         require("luasnip.loaders.from_vscode").lazy_load()
 
