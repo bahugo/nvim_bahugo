@@ -1,19 +1,20 @@
 return {
+    {
 
-    'neovim/nvim-lspconfig',
-    dependencies = {
-        -- LSP Support
-        { 'williamboman/mason.nvim' },
-        { 'williamboman/mason-lspconfig.nvim' },
-        -- LSP completion
-        { 'hrsh7th/cmp-nvim-lsp' },
-        -- Useful status Update for LSP
-        { 'j-hui/fidget.nvim', },
-        -- Additional lua configuration for nvim
-        { 'folke/neodev.nvim' },
-        "simrat39/rust-tools.nvim",
-        { "Hoffs/omnisharp-extended-lsp.nvim", lazy = true },
-    },
+        'neovim/nvim-lspconfig',
+        dependencies = {
+            -- LSP Support
+            { 'williamboman/mason.nvim' },
+            { 'williamboman/mason-lspconfig.nvim' },
+            -- LSP completion
+            { 'hrsh7th/cmp-nvim-lsp' },
+            -- Useful status Update for LSP
+            { 'j-hui/fidget.nvim', },
+            -- Additional lua configuration for nvim
+            { 'folke/neodev.nvim' },
+            { 'mrcjkb/rustaceanvim', version = '^4', ft = { 'rust' },},
+            { "Hoffs/omnisharp-extended-lsp.nvim", lazy = true },
+        },
     event = { "BufReadPre", "BufNewFile" },
     config = function()
         local path = require("plenary.path")
@@ -198,7 +199,6 @@ return {
         local mason_auto_installed = vim.tbl_keys(servers)
         table.insert(mason_auto_installed, "omnisharp")
         table.insert(mason_auto_installed, "marksman")
-        table.insert(mason_auto_installed, "rust_analyzer")
 
         mason_lspconfig.setup {
             ensure_installed = mason_auto_installed,
@@ -258,6 +258,7 @@ return {
                     enable_import_completion = true,
                 })
             end,
+
         }
         -- lsp for qt qml using python pyside6
         lspconfig.qmlls.setup {
@@ -266,13 +267,14 @@ return {
             capabilities = capabilities,
             on_attach = on_attach
         }
+        local rustacean = require("rustaceanvim");
 
         local on_attach_rust = function(_, bufnr)
             on_attach(_, bufnr)
             -- Hover actions
-            nmap("<leader-ha>", require('rust-tools').hover_actions.hover_actions, "Rust hover action")
+            nmap("<leader-ha>", rustacean.hover_actions.hover_actions, "Rust hover action")
             -- Code action groups
-            nmap("<leader>ca", require("rust-tools").code_action_group.code_action_group, "Rust [C]ode [A]ction")
+            nmap("<leader>ca", rustacean.code_action_group.code_action_group, "Rust [C]ode [A]ction")
         end
 
         local extension_path
@@ -291,27 +293,28 @@ return {
             liblldb_path = path:new(extension_path, 'lldb', 'lib', 'liblldb.so') -- pour linux .so
         end
 
-        local opts_rt = {
+        vim.g.rustaceanvim = function()
+            local cfg = require('rustaceanvim.config')
+            return {
+            -- Plugin configuration
             tools = {
-                -- rust-tools options
-
-                -- how to execute terminal commands
-                -- options right now: termopen / quickfix
-                executor = require("rust-tools.executors").quickfix
+                executor = require("rustaceanvim.executors").quickfix
             },
+            -- LSP configuration
             server = {
-                on_attach = on_attach_rust
+                on_attach = on_attach_rust,
+                default_settings = {
+                    -- rust-analyzer language server configuration
+                    ['rust-analyzer'] = {
+                    },
+                },
             },
-            -- ... other configs
             dap = {
-                adapter = require('rust-tools.dap').get_codelldb_adapter(
-                    codelldb_path.filename,
-                    liblldb_path.filename)
+                adapter = cfg.get_codelldb_adapter(codelldb_path.filename, liblldb_path.filename)
             }
         }
-
-        require("rust-tools").setup(opts_rt)
-
+    end
+        --
         -- Turn on lsp status information
         require("fidget").setup {
             window = {
@@ -351,4 +354,5 @@ return {
         sign({ name = 'DiagnosticSignHint', text = '⚑' })
         sign({ name = 'DiagnosticSignInfo', text = '' })
     end
+    },
 }

@@ -15,7 +15,9 @@ return {
                     "yaml", "csv", "xml", "bash", "fortran", "cmake", "json", "rst", "toml",
                     "markdown", "markdown_inline", "comment", "ssh_config",
                     "git_config", "gitcommit", "gitattributes", "gitignore",
-                    "regex", "latex", "fish", "doxygen", "dockerfile", "diff", "kdl"
+                    "regex", "fish", "doxygen", "dockerfile", "diff", "kdl",
+                    -- latex requires tree-sitter cli to be installed
+                    -- "latex",
                 },
                 highlight = { enable = true },
                 indent = { enable = true },
