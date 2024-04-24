@@ -14,6 +14,14 @@ return {
             { 'folke/neodev.nvim' },
             { 'mrcjkb/rustaceanvim', version = '^4', ft = { 'rust' },},
             { "Hoffs/omnisharp-extended-lsp.nvim", lazy = true },
+            -- lsp status line add symbol navigation
+            { "SmiteshP/nvim-navbuddy",
+                dependencies = {
+                    "SmiteshP/nvim-navic",
+                    "MunifTanjim/nui.nvim"
+                },
+                opts = { lsp = { auto_attach = true } }
+            },
         },
     event = { "BufReadPre", "BufNewFile" },
     config = function()
@@ -77,6 +85,10 @@ return {
 
             if client.server_capabilities.inlayHintProvider then
                 vim.lsp.buf.inlay_hint(bufnr, true)
+            end
+            if client.server_capabilities.documentSymbolProvider then
+                require("nvim-navic").attach(client, bufnr)
+                require("nvim-navbuddy").attach(client, bufnr)
             end
         end
 
@@ -258,7 +270,6 @@ return {
                     enable_import_completion = true,
                 })
             end,
-
         }
         -- lsp for qt qml using python pyside6
         lspconfig.qmlls.setup {

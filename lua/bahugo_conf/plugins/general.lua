@@ -41,11 +41,4 @@ return {
             require("crates").setup()
         end,
     },
-    -- fenetre d'affichage de la structure des fonctions et classes du fichier ouvert
-    {
-        "liuchengxu/vista.vim",
-        config = function()
-            vim.g.vista_default_executive = 'nvim_lsp'
-        end
-    },
 }
