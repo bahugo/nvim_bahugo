@@ -84,7 +84,7 @@ return {
                 { desc = 'Format current buffer with LSP' })
 
             if client.server_capabilities.inlayHintProvider then
-                vim.lsp.buf.inlay_hint(bufnr, true)
+                vim.lsp.inlay_hint.enable(true)
             end
             if client.server_capabilities.documentSymbolProvider then
                 require("nvim-navic").attach(client, bufnr)
@@ -106,9 +106,9 @@ return {
             -- clangd = {},
             -- gopls = {},
             -- tsserver = {},
-            ruff_lsp = {
+            ruff = {
                 -- python linter
-                ruff_lsp = {},
+                ruff = {},
             },
             pylyzer = {
                 -- python static analyzer
