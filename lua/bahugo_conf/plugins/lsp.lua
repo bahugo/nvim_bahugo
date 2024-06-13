@@ -278,15 +278,7 @@ return {
             capabilities = capabilities,
             on_attach = on_attach
         }
-        local rustacean = require("rustaceanvim");
 
-        local on_attach_rust = function(_, bufnr)
-            on_attach(_, bufnr)
-            -- Hover actions
-            nmap("<leader-ha>", rustacean.hover_actions.hover_actions, "Rust hover action")
-            -- Code action groups
-            nmap("<leader>ca", rustacean.code_action_group.code_action_group, "Rust [C]ode [A]ction")
-        end
 
         local extension_path
         local codelldb_path
@@ -313,7 +305,7 @@ return {
             },
             -- LSP configuration
             server = {
-                on_attach = on_attach_rust,
+                on_attach = on_attach,
                 default_settings = {
                     -- rust-analyzer language server configuration
                     ['rust-analyzer'] = {
