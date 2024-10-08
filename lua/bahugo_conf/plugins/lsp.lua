@@ -110,15 +110,6 @@ return {
                 -- python linter
                 ruff = {},
             },
-            pylyzer = {
-                -- python static analyzer
-                python = {
-                    checkOnType = false,
-                    diagnostics = false,
-                    inlayHints = false,
-                    smartCompletion = false
-                }
-            },
             -- for numpy completion please install numpydoc
             pylsp = {
                 pylsp = {
@@ -153,13 +144,13 @@ return {
                             enabled = false,
                             convention = "google",
                         },
-                        rope_autoimport = {
-                            enabled = false,
-                        },
-                        rope_completion = {
-                            enabled = false,
-                            eager = true
-                        },
+                        -- rope_autoimport = {
+                        --     enabled = false,
+                        -- },
+                        -- rope_completion = {
+                        --     enabled = false,
+                        --     eager = true
+                        -- },
                     }
                 }
             },
@@ -220,7 +211,7 @@ return {
         local warn_if_pylsp_plugins_are_not_installed = function()
             local site_packages
             local mypy_exe
-            local rope_exe
+            -- local rope_exe
             local python_lsp_venv = path:new("mason", "packages", "python-lsp-server", "venv")
             if (require("bahugo_conf.utils").is_windows()) then
                 site_packages = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "Lib","site-packages" )
@@ -237,15 +228,15 @@ return {
                     vim.log.levels.WARN, {})
             end
 
-            rope_exe  = path:new(site_packages,"pylsp_rope")
-            if not path.exists(rope_exe) then
-                vim.notify(tostring(rope_exe), vim.log.levels.WARN, {})
-                vim.notify(
-                    'Pour bénéficier des linters python, il faut installer manuellement les plugins pylsp \n' ..
-                    'supplémentaires en tapant la commande suivante: \n' ..
-                    ':PylspInstall pylsp-rope',
-                    vim.log.levels.WARN, {})
-            end
+            -- rope_exe  = path:new(site_packages,"pylsp_rope")
+            -- if not path.exists(rope_exe) then
+            --     vim.notify(tostring(rope_exe), vim.log.levels.WARN, {})
+            --     vim.notify(
+            --         'Pour bénéficier des linters python, il faut installer manuellement les plugins pylsp \n' ..
+            --         'supplémentaires en tapant la commande suivante: \n' ..
+            --         ':PylspInstall pylsp-rope',
+            --         vim.log.levels.WARN, {})
+            -- end
         end
 
         mason_lspconfig.setup_handlers {
@@ -288,7 +279,7 @@ return {
             cmd = { "pyside6-qmlls" },
             filetypes = { "qmljs", "qml" },
             capabilities = capabilities,
-            on_attach = on_attach
+            on_attach = on_attach,
         }
 
 
@@ -331,14 +322,14 @@ return {
     end
         --
         -- Turn on lsp status information
-        require("fidget").setup ({
+        require("fidget").setup {
                 notification = {
                     window = {
                         winblend=0
                     },
                 }
             -- ... the rest of your fidget config
-        })
+        }
 
         require('nvim-lightbulb').setup({ autocmd = { enabled = true } })
 
