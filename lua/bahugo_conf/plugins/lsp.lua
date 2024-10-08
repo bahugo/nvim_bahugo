@@ -223,9 +223,9 @@ return {
             local rope_exe
             local python_lsp_venv = path:new("mason", "packages", "python-lsp-server", "venv")
             if (require("bahugo_conf.utils").is_windows()) then
-                site_packages = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "venv","Lib","site-packages","pylsp_mypy")
+                site_packages = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "Lib","site-packages" )
             else
-                site_packages = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_venv, "venv", "Lib", "site-packages" )
+                site_packages = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_venv, "Lib", "site-packages" )
             end
             mypy_exe = path:new(site_packages,"pylsp_mypy")
             if not path.exists(mypy_exe) then
@@ -331,12 +331,14 @@ return {
     end
         --
         -- Turn on lsp status information
-        require("fidget").setup {
-            window = {
-                blend = 0,
-            },
+        require("fidget").setup ({
+                notification = {
+                    window = {
+                        winblend=0
+                    },
+                }
             -- ... the rest of your fidget config
-        }
+        })
 
         require('nvim-lightbulb').setup({ autocmd = { enabled = true } })
 
