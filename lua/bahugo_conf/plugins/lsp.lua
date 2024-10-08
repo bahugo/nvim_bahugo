@@ -218,20 +218,32 @@ return {
         }
 
         local warn_if_pylsp_plugins_are_not_installed = function()
+            local site_packages
             local mypy_exe
+            local rope_exe
             local python_lsp_venv = path:new("mason", "packages", "python-lsp-server", "venv")
             if (require("bahugo_conf.utils").is_windows()) then
-                mypy_exe = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "Scripts", "mypy.exe")
+                site_packages = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "venv","Lib","site-packages","pylsp_mypy")
             else
-                mypy_exe = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_venv, "bin", "mypy")
+                site_packages = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_venv, "venv", "Lib", "site-packages" )
             end
+            mypy_exe = path:new(site_packages,"pylsp_mypy")
             if not path.exists(mypy_exe) then
                 vim.notify(tostring(mypy_exe), vim.log.levels.WARN, {})
                 vim.notify(
                     'Pour bénéficier des linters python, il faut installer manuellement les plugins pylsp \n' ..
                     'supplémentaires en tapant la commande suivante: \n' ..
-                    ':PylspInstall pylsp-rope pylsp-mypy',
+                    ':PylspInstall pylsp-mypy',
+                    vim.log.levels.WARN, {})
+            end
 
+            rope_exe  = path:new(site_packages,"pylsp_rope")
+            if not path.exists(rope_exe) then
+                vim.notify(tostring(rope_exe), vim.log.levels.WARN, {})
+                vim.notify(
+                    'Pour bénéficier des linters python, il faut installer manuellement les plugins pylsp \n' ..
+                    'supplémentaires en tapant la commande suivante: \n' ..
+                    ':PylspInstall pylsp-rope',
                     vim.log.levels.WARN, {})
             end
         end
