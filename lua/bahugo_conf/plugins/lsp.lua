@@ -282,7 +282,7 @@ return {
         }
         -- lsp for qt qml using python pyside6
         lspconfig.qmlls.setup {
-            cmd = { "pyside6-qmlls" },
+            cmd = { "qmlls" },
             filetypes = { "qmljs", "qml" },
             capabilities = capabilities,
             on_attach = on_attach,
