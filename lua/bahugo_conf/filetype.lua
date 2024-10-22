@@ -4,7 +4,10 @@ vim.filetype.add({
         comm = 'aster',
         qml = 'qmljs',
     },
+    pattern = {
+        ["%.gitlab%-ci.*.yml"] = 'yaml.gitlab',
+    },
     filename = {
-        ['.gitlab-ci.yml'] = 'yaml.gitlab',
+        ['.astro.config.mjs'] = 'astro',
     },
 })

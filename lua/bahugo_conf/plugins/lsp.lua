@@ -186,9 +186,9 @@ return {
             yamlls = {
                 yamlls = {},
                 },
-            gitlab_ci_ls = {
-                gitlab_ci_ls = {},
-                },
+            -- gitlab_ci_ls = {
+            --     gitlab_ci_ls = {},
+            --     },
             -- -- Linter servers
             -- sqlfluff = {},
             -- markdownlint = {},
