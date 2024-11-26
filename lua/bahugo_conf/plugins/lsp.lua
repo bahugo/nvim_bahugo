@@ -106,6 +106,10 @@ return {
             -- clangd = {},
             -- gopls = {},
             -- tsserver = {},
+            taplo = {
+                -- toml lsp
+                taplo = {},
+            },
             ruff = {
                 -- python linter
                 ruff = {},
