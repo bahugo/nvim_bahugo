@@ -10,12 +10,13 @@ return {
         config = function()
             local config = require("nvim-treesitter.configs")
             config.setup({
-                ensure_installed = { "qmldir", "qmljs", "cpp", "c_sharp", "python", "c", "astro",
+                ensure_installed = {"awk", "qmldir", "qmljs", "cpp", "c_sharp", "python", "c", "astro",
                     "html", "javascript", "typescript", "jsdoc", "lua", "luadoc", "rust", "sql",
                     "yaml", "csv", "xml", "bash", "fortran", "cmake", "json", "rst", "toml",
                     "markdown", "markdown_inline", "comment", "ssh_config",
-                    "git_config", "gitcommit", "gitattributes", "gitignore",
-                    "regex", "fish", "doxygen", "dockerfile", "diff", "kdl",
+                    "git_config", "git_rebase", "gitcommit", "gitattributes", "gitignore",
+                    "regex", "fish", "doxygen", "dockerfile", "diff",
+                    "mermaid", "meson", "tmux",
                     -- latex requires tree-sitter cli to be installed
                     -- "latex",
                 },
