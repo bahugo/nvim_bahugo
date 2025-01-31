@@ -231,8 +231,8 @@ return {
                     site_packages = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "Lib",
                         "site-packages")
                 else
-                    site_packages = path:new(os.getenv("HOME"), ".local", "share", "nvim", python_lsp_venv, "Lib",
-                        "site-packages")
+                    site_packages = path:new(os.getenv("HOME"), ".local", "share", "nvim",
+                        python_lsp_venv, "lib", "python3.13","site-packages")
                 end
                 mypy_exe = path:new(site_packages, "pylsp_mypy")
                 if not path.exists(mypy_exe) then
