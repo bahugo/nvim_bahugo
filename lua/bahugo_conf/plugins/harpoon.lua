@@ -10,7 +10,7 @@ return {
         vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end, { desc = "Harpoon - add file" } )
         vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon - toggle" })
 
-        vim.keymap.set("n", "<C-h>", function() harpoon:list():next({ui_nav_wrap=true}) end, { desc = "Harpoon - cycle ->" })
-        vim.keymap.set("n", "<C-y>", function() harpoon:list():prev({ui_nav_wrap=true}) end, { desc = "Harpoon - cycle <-" })
+        vim.keymap.set("n", "<C-S-n>", function() harpoon:list():next({ui_nav_wrap=true}) end, { desc = "Harpoon - cycle ->" })
+        vim.keymap.set("n", "<C-S-p>", function() harpoon:list():prev({ui_nav_wrap=true}) end, { desc = "Harpoon - cycle <-" })
     end
 }
