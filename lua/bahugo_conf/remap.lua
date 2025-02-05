@@ -21,13 +21,17 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 vim.keymap.set("n", "Q", "<nop>")
 -- vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, {desc = "Format File"})
-vim.keymap.set("n", "<C-h>", "<C-w>h", {desc="Window <-"} )
-vim.keymap.set("n", "<C-l>", "<C-w>l", {desc="Window ->"} )
-vim.keymap.set("n", "<C-j>", "<C-w>j", {desc="Window DOWN"} )
-vim.keymap.set("n", "<C-k>", "<C-w>k", {desc="Window UP"} )
 
-vim.keymap.set("n", "<leader>k", "<cmd>cnext<CR>zz")
-vim.keymap.set("n", "<leader>j", "<cmd>cprev<CR>zz")
+-- Better window navigation
+vim.keymap.set("n", "<A-h>", "<C-w>h", {desc="Window <-"} )
+vim.keymap.set("n", "<A-l>", "<C-w>l", {desc="Window ->"} )
+vim.keymap.set("n", "<A-j>", "<C-w>j", {desc="Window DOWN"} )
+vim.keymap.set("n", "<A-k>", "<C-w>k", {desc="Window UP"} )
+
+vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
+vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
+vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
+vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
 vim.keymap.set("n", "<leader>rs", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 vim.keymap.set("n", "<leader>cx", "<cmd>!chmod +x %<CR>", { silent = true, desc = "Change execution rights of current file" })
