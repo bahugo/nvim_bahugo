@@ -21,19 +21,19 @@ return {
         { mode={ 'n', 'v' }, '<F12>', function() require('dap').step_out() end,  desc = "DAP step out" },
         {
             mode='n',
-            '<Leader>b',
+            '<leader>b',
             function() require('dap').toggle_breakpoint() end,
             desc = "DAP toggle breakpoint"
         },
         {
             mode='n',
-            '<Leader>B',
+            '<leader>B',
             function() require('dap').set_breakpoint() end,
             desc = "DAP set breakpoint"
         },
         {
             mode='n',
-            '<Leader>lp',
+            '<leader>lp',
             function()
                 require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
             end,
@@ -41,19 +41,19 @@ return {
         },
         {
             mode='n',
-            '<Leader>dr',
+            '<leader>dr',
             function() require('dap').repl.open() end,
             desc = "DAP repl open"
         },
         {
             mode='n',
-            '<Leader>dl',
+            '<leader>dl',
             function() require('dap').run_last() end,
             desc = "DAP run last"
         },
         {
             mode={ 'n', 'v' },
-            '<Leader>dh',
+            '<leader>dh',
             function()
                 require('dap.ui.widgets').hover()
             end,
@@ -61,7 +61,7 @@ return {
         },
         {
             mode={ 'n', 'v' },
-            '<Leader>dp',
+            '<leader>dp',
             function()
                 require('dap.ui.widgets').preview()
             end,
@@ -69,7 +69,7 @@ return {
         },
         {
             mode='n',
-            '<Leader>df',
+            '<leader>df',
             function()
                 local widgets = require('dap.ui.widgets')
                 widgets.centered_float(widgets.frames)
@@ -78,12 +78,20 @@ return {
         },
         {
             mode='n',
-            '<Leader>ds',
+            '<leader>ds',
             function()
                 local widgets = require('dap.ui.widgets')
                 widgets.centered_float(widgets.scopes)
             end,
             desc = "DAP scopes"
+        },
+        {
+            mode='n',
+            '<leader>do',
+            function()
+                require('dapui').open()
+            end,
+            desc = "DAP open dapui"
         },
     },
     config = function()
