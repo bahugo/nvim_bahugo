@@ -353,7 +353,8 @@ return {
             vim.diagnostic.config({
                 underline = true,
                 signs = true,
-                virtual_text = true,
+                virtual_lines = true,
+                -- virtual_text = true,
                 float = {
                     show_header = true,
                     -- source pour afficher d'où vient le diagnostic
