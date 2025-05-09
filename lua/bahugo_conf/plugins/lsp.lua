@@ -232,7 +232,7 @@ return {
                         "site-packages")
                 else
                     site_packages = path:new(os.getenv("HOME"), ".local", "share", "nvim",
-                        python_lsp_venv, "lib", "python3.13","site-packages")
+                        python_lsp_venv, "lib", "python3.13", "site-packages")
                 end
                 mypy_exe = path:new(site_packages, "pylsp_mypy")
                 if not path.exists(mypy_exe) then
@@ -352,7 +352,6 @@ return {
             -- Réglage du format d'affichage des diagnostics
             vim.diagnostic.config({
                 underline = true,
-                signs = true,
                 -- virtual_lines = true,
                 virtual_text = true,
                 float = {
@@ -364,20 +363,20 @@ return {
                 },
                 update_in_insert = false, -- default to false
                 severity_sort = false,    -- default to false
+
+                signs = {
+                    text = {
+                        [vim.diagnostic.severity.ERROR] = '✘',
+                        [vim.diagnostic.severity.WARN] = '▲',
+                        [vim.diagnostic.severity.HINT] = '⚑',
+                        [vim.diagnostic.severity.INFO] = '',
+                    },
+                },
+                inlay_hints = {
+                    enabled = true,
+                    exclude = {  }, -- filetypes for which you don't want to enable inlay hints
+                },
             })
-
-            local sign = function(opts)
-                vim.fn.sign_define(opts.name, {
-                    texthl = opts.name,
-                    text = opts.text,
-                    numhl = ''
-                })
-            end
-
-            sign({ name = 'DiagnosticSignError', text = '✘' })
-            sign({ name = 'DiagnosticSignWarn', text = '▲' })
-            sign({ name = 'DiagnosticSignHint', text = '⚑' })
-            sign({ name = 'DiagnosticSignInfo', text = '' })
         end
     },
 }
