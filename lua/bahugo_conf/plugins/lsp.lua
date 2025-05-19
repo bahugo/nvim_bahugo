@@ -104,7 +104,7 @@ return {
             --  the `settings` field of the server config. You must look up that documentation yourself.
             local servers = {
                 -- LSP servers
-                -- clangd = {},
+                clangd = {},
                 -- gopls = {},
                 -- tsserver = {},
                 taplo = {
@@ -114,50 +114,6 @@ return {
                 ruff = {
                     -- python linter
                     ruff = {},
-                },
-                -- for numpy completion please install numpydoc
-                pylsp = {
-                    pylsp = {
-                        plugins = {
-                            -- pour ruff voir doc https://github.com/python-lsp/python-lsp-ruff
-                            ruff = {
-                                enabled = false,
-                            },
-                            pyflakes = {
-                                enabled = false,
-                            },
-                            yapf = {
-                                enabled = false,
-                            },
-                            autopep8 = {
-                                enabled = false,
-                            },
-                            mccabe = {
-                                enabled = false,
-                            },
-                            pycodestyle = {
-                                enabled = false,
-                                ignore = {
-                                    -- W391 blank line at end of file
-                                    'W391',
-                                    -- E402 module level import not at top of file
-                                    "E402",
-                                },
-                                maxLineLength = 100
-                            },
-                            pydocstyle = {
-                                enabled = false,
-                                convention = "google",
-                            },
-                            -- rope_autoimport = {
-                            --     enabled = false,
-                            -- },
-                            -- rope_completion = {
-                            --     enabled = false,
-                            --     eager = true
-                            -- },
-                        }
-                    }
                 },
                 lua_ls = {
                     Lua = {
@@ -219,77 +175,27 @@ return {
 
             mason_lspconfig.setup {
                 ensure_installed = mason_auto_installed,
-                automatic_installation = true
+                automatic_enable = false
             }
 
-            local warn_if_pylsp_plugins_are_not_installed = function()
-                local site_packages
-                local mypy_exe
-                -- local rope_exe
-                local python_lsp_venv = path:new("mason", "packages", "python-lsp-server", "venv")
-                if (require("bahugo_conf.utils").is_windows()) then
-                    site_packages = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", python_lsp_venv, "Lib",
-                        "site-packages")
-                else
-                    site_packages = path:new(os.getenv("HOME"), ".local", "share", "nvim",
-                        python_lsp_venv, "lib", "python3.13", "site-packages")
-                end
-                mypy_exe = path:new(site_packages, "pylsp_mypy")
-                if not path.exists(mypy_exe) then
-                    vim.notify(tostring(mypy_exe), vim.log.levels.WARN, {})
-                    vim.notify(
-                        'Pour bénéficier des linters python, il faut installer manuellement les plugins pylsp \n' ..
-                        'supplémentaires en tapant la commande suivante: \n' ..
-                        ':PylspInstall pylsp-mypy',
-                        vim.log.levels.WARN, {})
-                end
-
-                -- rope_exe  = path:new(site_packages,"pylsp_rope")
-                -- if not path.exists(rope_exe) then
-                --     vim.notify(tostring(rope_exe), vim.log.levels.WARN, {})
-                --     vim.notify(
-                --         'Pour bénéficier des linters python, il faut installer manuellement les plugins pylsp \n' ..
-                --         'supplémentaires en tapant la commande suivante: \n' ..
-                --         ':PylspInstall pylsp-rope',
-                --         vim.log.levels.WARN, {})
-                -- end
+            vim.lsp.config("*", {
+                capabilities = capabilities,
+                on_attach = on_attach,
+            })
+            for server_name, _ in pairs(servers) do
+                require('lspconfig')[server_name].setup {
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                    settings = servers[server_name]
+                }
             end
+            vim.lsp.config("ty", {
+                cmd = { "uvx", 'ty', 'server' },
+                filetypes = { 'python' },
+                root_markers = { 'ty.toml', 'pyproject.toml', '.git' },
+            })
+            vim.lsp.enable("ty")
 
-            mason_lspconfig.setup_handlers {
-                function(server_name)
-                    local config_handlers = {
-                        capabilities = capabilities,
-                        on_attach = on_attach,
-                        settings = servers[server_name],
-                    }
-                    if server_name == "pylsp" then
-                        warn_if_pylsp_plugins_are_not_installed()
-                    end
-                    -- print("lspconfig setup " .. server_name)
-                    -- print(vim.inspect(servers[server_name]))
-                    lspconfig[server_name].setup(config_handlers)
-                end,
-                ["pylyzer"] = function()
-                    -- temporary disable pylyzer
-                    -- lspconfig.pylyzer.setup{
-                    -- capabilities = capabilities,
-                    -- on_attach = on_attach,
-                    -- settings = servers.pylyzer,
-                    -- }
-                end,
-                ["omnisharp"] = function()
-                    lspconfig.omnisharp.setup({
-                        handlers = {
-                            ["textDocument/definition"] = function(...)
-                                return require("omnisharp_extended").handler(...)
-                            end,
-                        },
-                        enable_roslyn_analyzers = true,
-                        organize_imports_on_format = true,
-                        enable_import_completion = true,
-                    })
-                end,
-            }
             -- lsp for qt qml using python pyside6
             lspconfig.qmlls.setup {
                 cmd = { "qmlls" },
@@ -297,7 +203,16 @@ return {
                 capabilities = capabilities,
                 on_attach = on_attach,
             }
-
+            lspconfig.omnisharp.setup({
+                handlers = {
+                    ["textDocument/definition"] = function(...)
+                        return require("omnisharp_extended").handler(...)
+                    end,
+                },
+                enable_roslyn_analyzers = true,
+                organize_imports_on_format = true,
+                enable_import_completion = true,
+            })
 
             local extension_path
             local codelldb_path
@@ -374,7 +289,7 @@ return {
                 },
                 inlay_hints = {
                     enabled = true,
-                    exclude = {  }, -- filetypes for which you don't want to enable inlay hints
+                    exclude = {}, -- filetypes for which you don't want to enable inlay hints
                 },
             })
         end
