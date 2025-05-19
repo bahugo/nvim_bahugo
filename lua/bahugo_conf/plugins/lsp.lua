@@ -115,6 +115,42 @@ return {
                     -- python linter
                     ruff = {},
                 },
+                -- for numpy completion please install numpydoc
+                pylsp = {
+                    pylsp = {
+                        plugins = {
+                            ruff = {
+                                enabled = false,
+                            },
+                            pyflakes = {
+                                enabled = false,
+                            },
+                            yapf = {
+                                enabled = false,
+                            },
+                            autopep8 = {
+                                enabled = false,
+                            },
+                            mccabe = {
+                                enabled = false,
+                            },
+                            pycodestyle = {
+                                enabled = false,
+                            },
+                            pydocstyle = {
+                                enabled = false,
+                                convention = "google",
+                            },
+                            -- rope_autoimport = {
+                            --     enabled = false,
+                            -- },
+                            -- rope_completion = {
+                            --     enabled = false,
+                            --     eager = true
+                            -- },
+                        }
+                    }
+                },
                 lua_ls = {
                     Lua = {
                         runtime = {
@@ -160,8 +196,10 @@ return {
             }
 
             -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+            local capabilities = vim.tbl_deep_extend("force",
+                vim.lsp.protocol.make_client_capabilities(),
+                require('cmp_nvim_lsp').default_capabilities()
+           )
 
             -- Setup mason so it can manage external tooling
             require('mason').setup()
@@ -184,8 +222,6 @@ return {
             })
             for server_name, _ in pairs(servers) do
                 require('lspconfig')[server_name].setup {
-                    capabilities = capabilities,
-                    on_attach = on_attach,
                     settings = servers[server_name]
                 }
             end
@@ -203,6 +239,7 @@ return {
                 capabilities = capabilities,
                 on_attach = on_attach,
             }
+            vim.lsp.enable("qmlls")
             lspconfig.omnisharp.setup({
                 handlers = {
                     ["textDocument/definition"] = function(...)
@@ -213,6 +250,7 @@ return {
                 organize_imports_on_format = true,
                 enable_import_completion = true,
             })
+            vim.lsp.enable("omnisharp")
 
             local extension_path
             local codelldb_path

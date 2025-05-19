@@ -95,52 +95,17 @@ return {
         },
     },
     config = function()
-        local path = require("plenary.path")
-
-        -- Fonction utilitaires
-        local is_windows = require("bahugo_conf.utils").is_windows
-
-        local get_exe_extension = function()
-            if (is_windows())
-            then
-                return ".exe"
-            end
-            return ""
-        end
-
-        local get_debubpy_python = function()
-            local python_exe
-            if (is_windows())
-            then
-                python_exe = path:new(os.getenv("LOCALAPPDATA"), "nvim-data", "mason", "packages",
-                    "debugpy", "venv", "Scripts", "python.exe")
-            else
-                python_exe = path:new(os.getenv("HOME"), ".local", "share", "nvim", "mason", "packages",
-                    "debugpy", "venv", "bin", "python")
-            end
-            if not path.exists(python_exe) then
-                vim.notify("debugpy introuvable, vérifier qu'il a bien été installé avec mason :"
-                    .. python_exe.filename, vim.log.levels.WARN)
-            end
-            return python_exe.filename
-        end
-
-        local resolve_python = function()
-            local exe = get_exe_extension()
-            return path:new(os.getenv("CONDA_PREFIX"), 'python' .. exe).filename
-        end
-
         local dap = require('dap')
 
-        -- set des keymap
-
         local dap_py = require("dap-python")
-        dap_py.setup(get_debubpy_python())
-        dap_py.resolve_python = resolve_python
+        dap_py.setup("uv")
+        -- dap_py.resolve_python = resolve_python
         dap_py.test_runner = "pytest"
         -- Modifiying config order
         local dap_py_configs = dap.configurations.python
         local configs = {}
+        dap_py_configs[3]["subProcess"] = false
+        dap_py_configs[3]["stopOnEntry"] = true
         table.insert(configs, dap_py_configs[3])
         table.insert(configs, dap_py_configs[1])
         table.insert(configs, dap_py_configs[2])
