@@ -226,7 +226,7 @@ return {
                 }
             end
             vim.lsp.config("ty", {
-                cmd = { "uvx", 'ty', 'server' },
+                cmd = { "uvx", 'ty@latest', 'server' },
                 filetypes = { 'python' },
                 root_markers = { 'ty.toml', 'pyproject.toml', '.git' },
             })
