@@ -95,8 +95,6 @@ return {
 
             require("neodev").setup()
 
-            local lspconfig = require("lspconfig")
-
             -- Enable the following language servers
             --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
             --
@@ -186,6 +184,9 @@ return {
                 yamlls = {
                     yamlls = {},
                 },
+                fortls = {
+                    fortls = {},
+                },
                 -- gitlab_ci_ls = {
                 --     gitlab_ci_ls = {},
                 --     },
@@ -221,9 +222,9 @@ return {
                 on_attach = on_attach,
             })
             for server_name, _ in pairs(servers) do
-                require('lspconfig')[server_name].setup {
+                vim.lsp.config(server_name, {
                     settings = servers[server_name]
-                }
+                })
             end
             vim.lsp.config("ty", {
                 cmd = { "uvx", 'ty@latest', 'server' },
@@ -233,14 +234,14 @@ return {
             vim.lsp.enable("ty")
 
             -- lsp for qt qml using python pyside6
-            lspconfig.qmlls.setup {
+            vim.lsp.config("qmlls", {
                 cmd = { "qmlls" },
                 filetypes = { "qmljs", "qml" },
                 capabilities = capabilities,
                 on_attach = on_attach,
-            }
+            })
             vim.lsp.enable("qmlls")
-            lspconfig.omnisharp.setup({
+            vim.lsp.config("omnisharp", {
                 handlers = {
                     ["textDocument/definition"] = function(...)
                         return require("omnisharp_extended").handler(...)
