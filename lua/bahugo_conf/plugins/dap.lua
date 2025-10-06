@@ -1,14 +1,12 @@
 return {
     -- Debugging
     "mfussenegger/nvim-dap",
-    -- wants = { "nvim-dap-virtual-text", "nvim-dap-ui", "nvim-dap-python",
-    --     "which-key.nvim" },
     dependencies = {
         "williamboman/mason.nvim",
         "theHamsta/nvim-dap-virtual-text",
         "rcarriga/nvim-dap-ui",
         "nvim-neotest/nvim-nio",
-        "mfussenegger/nvim-dap-python",
+        "https://codeberg.org/mfussenegger/nvim-dap-python",
         "nvim-telescope/telescope-dap.nvim",
         "jbyuki/one-small-step-for-vimkind",
     },
