@@ -113,42 +113,6 @@ return {
                     -- python linter
                     ruff = {},
                 },
-                -- for numpy completion please install numpydoc
-                pylsp = {
-                    pylsp = {
-                        plugins = {
-                            ruff = {
-                                enabled = false,
-                            },
-                            pyflakes = {
-                                enabled = false,
-                            },
-                            yapf = {
-                                enabled = false,
-                            },
-                            autopep8 = {
-                                enabled = false,
-                            },
-                            mccabe = {
-                                enabled = false,
-                            },
-                            pycodestyle = {
-                                enabled = false,
-                            },
-                            pydocstyle = {
-                                enabled = false,
-                                convention = "google",
-                            },
-                            -- rope_autoimport = {
-                            --     enabled = false,
-                            -- },
-                            -- rope_completion = {
-                            --     enabled = false,
-                            --     eager = true
-                            -- },
-                        }
-                    }
-                },
                 lua_ls = {
                     Lua = {
                         runtime = {
@@ -225,6 +189,7 @@ return {
                 vim.lsp.config(server_name, {
                     settings = servers[server_name]
                 })
+                vim.lsp.enable(server_name)
             end
             vim.lsp.config("ty", {
                 cmd = { "uvx", 'ty@latest', 'server' },
