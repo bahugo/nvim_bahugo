@@ -191,6 +191,9 @@ return {
                 })
                 vim.lsp.enable(server_name)
             end
+
+            vim.lsp.config("ruff", {filetypes={"python", "aster"}})
+
             vim.lsp.config("ty", {
                 cmd = { "uvx", 'ty@latest', 'server' },
                 filetypes = { 'python' },
