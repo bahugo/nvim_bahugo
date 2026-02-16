@@ -151,6 +151,15 @@ return {
                 fortls = {
                     fortls = {},
                 },
+                dockerls = {
+                    dockerls = {},
+                },
+                neocmake = {
+                    neocmake = {},
+                },
+                mesonlsp = {
+                    meson = {},
+                }
                 -- gitlab_ci_ls = {
                 --     gitlab_ci_ls = {},
                 --     },
@@ -164,7 +173,7 @@ return {
             local capabilities = vim.tbl_deep_extend("force",
                 vim.lsp.protocol.make_client_capabilities(),
                 require('cmp_nvim_lsp').default_capabilities()
-           )
+            )
 
             -- Setup mason so it can manage external tooling
             require('mason').setup()
@@ -192,7 +201,7 @@ return {
                 vim.lsp.enable(server_name)
             end
 
-            vim.lsp.config("ruff", {filetypes={"python", "aster"}})
+            vim.lsp.config("ruff", { filetypes = { "python", "aster" } })
 
             vim.lsp.config("ty", {
                 cmd = { "uvx", 'ty@latest', 'server' },
