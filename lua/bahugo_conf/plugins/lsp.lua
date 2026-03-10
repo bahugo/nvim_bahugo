@@ -159,7 +159,7 @@ return {
                 },
                 mesonlsp = {
                     meson = {},
-                }
+                },
                 -- gitlab_ci_ls = {
                 --     gitlab_ci_ls = {},
                 --     },
@@ -184,6 +184,7 @@ return {
             local mason_auto_installed = vim.tbl_keys(servers)
             table.insert(mason_auto_installed, "omnisharp")
             table.insert(mason_auto_installed, "marksman")
+            table.insert(mason_auto_installed, "bashls")
 
             mason_lspconfig.setup {
                 ensure_installed = mason_auto_installed,
@@ -230,6 +231,11 @@ return {
             })
             vim.lsp.enable("omnisharp")
 
+            vim.lsp.config.bashls = {
+              cmd = { 'bash-language-server', 'start' },
+              filetypes = { 'bash', 'sh' }
+            }
+            vim.lsp.enable 'bashls'
             local extension_path
             local codelldb_path
             local liblldb_path
