@@ -102,12 +102,20 @@ return {
         -- Modifiying config order
         local dap_py_configs = dap.configurations.python
         local configs = {}
-        dap_py_configs[3]["subProcess"] = false
-        dap_py_configs[3]["stopOnEntry"] = true
-        table.insert(configs, dap_py_configs[3])
-        table.insert(configs, dap_py_configs[1])
-        table.insert(configs, dap_py_configs[2])
-        table.insert(configs, dap_py_configs[4])
+        local newOrder = {3, 1, 2, 4,}
+        for i = 1, #newOrder do
+            local tmpConfig=dap_py_configs[newOrder[i]]
+            tmpConfig["justMyCode"] = false
+            if tmpConfig["name"] == "attach" then
+                tmpConfig["subProcess"] = false
+                tmpConfig["stopOnEntry"] = true
+            end
+            table.insert(configs, tmpConfig)
+        end
+        -- table.insert(configs, dap_py_configs[3])
+        -- table.insert(configs, dap_py_configs[1])
+        -- table.insert(configs, dap_py_configs[2])
+        -- table.insert(configs, dap_py_configs[4])
 
         dap.configurations.python = configs
 

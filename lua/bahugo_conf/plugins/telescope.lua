@@ -36,10 +36,21 @@ local grep_on_quickfix = function()
     telescope_builtin.live_grep({ vimgrep_arguments = args })
 end
 
+vim.api.nvim_create_autocmd("User", {
+  pattern = "TelescopePreviewerLoaded",
+  callback = function(args)
+    if args.data.filetype ~= "help" then
+      vim.wo.number = true
+    elseif args.data.bufname:match("*.csv") then
+      vim.wo.wrap = false
+    end
+  end,
+})
+
 return {
 
     'nvim-telescope/telescope.nvim',
-    branch = '0.1.x',
+    version = '*',
     dependencies = { { 'nvim-lua/plenary.nvim' } },
     keys = {
 
