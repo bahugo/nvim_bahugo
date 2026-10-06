@@ -12,7 +12,7 @@ return {
             { 'j-hui/fidget.nvim', },
             -- Additional lua configuration for nvim
             { 'folke/neodev.nvim' },
-            { 'mrcjkb/rustaceanvim',               version = '^4', ft = { 'rust' }, },
+            { 'mrcjkb/rustaceanvim', version = '^9', lazy = false, },
             { "Hoffs/omnisharp-extended-lsp.nvim", lazy = true },
             -- lsp status line add symbol navigation
             {
@@ -159,6 +159,9 @@ return {
                 },
                 mesonlsp = {
                     meson = {},
+                },
+                typos_lsp = {
+                    typos_lsp = {},
                 },
                 -- gitlab_ci_ls = {
                 --     gitlab_ci_ls = {},
